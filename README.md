@@ -24,10 +24,10 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Future Plans
 
-- Divide the ango_Database Class into the following three:
- - Mango_Database *(database and connection manage)*
- - Mango_Collection *(collection manage)*
- - Mango_Document *(document manage)*
+- Divide the **Mango_Database Class** into the following three:
+ - **Mango_Database Class** — database and connection managing
+ - **Mango_Collection Class** — collection managing
+ - **Mango_Document Class** — document managing
 - Implement profiling
 - Special version for Kohana Framework 3.2.x
 - Special version for Kohana Framework 3.3.x
@@ -43,16 +43,16 @@ It is vital to check the log report on a regular basis as it is often the only w
    * Enable modules. Modules are referenced by a relative or absolute path.
    */
   Kohana::modules(array(
-  'gleez'     => MODPATH.'gleez',      // Gleez Core Module
-  'user'      => MODPATH.'user',       // User and group Administration
-  'cache'     => MODPATH.'cache',      // Caching with multiple backends
-  'database'  => MODPATH.'database',   // Database access
-  'image'     => MODPATH.'image',      // Image manipulation
-  'captcha'   => MODPATH.'captcha',    // Captcha implementation
-  'unittest'  => MODPATH.'unittest',   // Unit testing
-  'codebench' => MODPATH.'codebench',  // Benchmarking tool
-  'userguide' => MODPATH.'userguide',  // User guide and API documentation
-  'mango'     => MODPATH.'mango',      // Mango Reader module
+    'gleez'     => MODPATH.'gleez',      // Gleez Core Module
+    'user'      => MODPATH.'user',       // User and group Administration
+    'cache'     => MODPATH.'cache',      // Caching with multiple backends
+    'database'  => MODPATH.'database',   // Database access
+    'image'     => MODPATH.'image',      // Image manipulation
+    'captcha'   => MODPATH.'captcha',    // Captcha implementation
+    'unittest'  => MODPATH.'unittest',   // Unit testing
+    'codebench' => MODPATH.'codebench',  // Benchmarking tool
+    'userguide' => MODPATH.'userguide',  // User guide and API documentation
+    'mango'     => MODPATH.'mango',      // Mango Reader module
   ));
 ```
 
@@ -62,7 +62,9 @@ It is vital to check the log report on a regular basis as it is often the only w
   Kohana::$log->attach(new Log_Mango());
 ```
 
-- For Routes see `modules/<mango_dir>/init.php`
+- For Routes see `MODPATH/<mango_dir>/init.php`
+
+- See `MODPATH/<mango_dir>/config/mango.php` and create `APPATH/config/mango.php` for your individual settings
 
 
 ## Contributors
