@@ -3,7 +3,7 @@
  * Setting the Routes
  *
  * @package    Gleez
- * @category   Routing/Mango
+ * @category   Routing
  * @author     Sergey Yakovlev
  * @copyright  (c) 2013 Gleez Technologies
  * @license    http://gleezcms.org/license
@@ -12,7 +12,7 @@
 /** Routing setup */
 if (! Route::cache())
 {
-  Route::set('admin/log', 'admin/logs(/<action>)(/p<page>)(/<id>)', array(
+  Route::set('admin/log', 'admin/logs(/<action>)(/<id>)(/p<page>)', array(
       'id'      => '([A-Za-z0-9]+)',
       'page'    => '\d+',
       'action'  => 'list|view|delete',
