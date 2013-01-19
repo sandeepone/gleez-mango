@@ -40,6 +40,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 - View list of all events
 - View single log event
 - Delete event from log
+- Drop system log
 
 
 ## Future Plans
