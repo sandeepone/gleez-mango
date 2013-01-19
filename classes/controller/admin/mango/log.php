@@ -1,49 +1,55 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Controller Class for control logging
+ * Контролер управления системным журналом
  *
- * ### System Requirements
+ * ### Системные требования
  *
- * - PHP 5.3 or higher
- * - PHP-extension Mongodb 1.3 or higher
- * - Mango Reader module 0.1.1.1 or higher
- * - ACL [Optional]
+ *  - PHP 5.3 или старше
+ *  - PHP-расширение Mongodb 1.3 или старше
+ *  - Модуль Mango Reader 0.1.1.1 или старше
+ *  - ACL [Опционально]
  *
  * @package   Mango
  * @category  Controller
- * @author    Sergey Yakovlev
- * @copyright (c) 2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @author    Яковлев Сергей (me@klay.me)
+ * @version   0.1.1.1
+ * @copyright (c) 2013 Яковлев Сергей
+ * @license   GPLv3
  */
 
 class Controller_Admin_Mango_Log extends Controller_Admin {
 
-  /** The before() method is called before controller action. */
+  /** Метод before() всегда запускается перед любым экшеном */
   public function before()
   {
-    // Required privilege
+    // Изначально требуемые привилегии
     if (class_exists('ACL'))
     {
       ACL::Required('view logs');
     }
 
-    // Loading module specific styles
+    // Подгружаем специфичные модулю стили
     Assets::css('user', 'media/css/mango.css', NULL, array('weight' => 0));
 
+    // Выполнить родительский before()
     parent::before();
   }
 
-  /** Shows list of events */
+  /** Список событий */
   public function action_list()
   {
-    $this->title = __('System log');
+    // Заголовок страницы
+    $this->title = 'Системный журнал';
 
+    // Создаём экземпляр Mango_Database
     $db = Mango::instance();
 
+    // Формируем представление
     $view = View::factory('admin/mango/log/list')
                 ->bind('pagination',  $pagination)
                 ->bind('logs',        $logs);
 
+    // Листалка по страницам
     $pagination = Pagination::factory(
       array
       (
@@ -54,6 +60,7 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
       )
     );
 
+    // Выбираем все журналы
     $logs = $db->find('Logs')
                ->skip($pagination->offset)
                ->sort(array('time'=> -1))
@@ -62,96 +69,112 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
     $this->response->body($view);
   }
 
-  /** View a particular event */
+  /** Просмотр конкретного cобытия */
   public function action_view()
   {
+    // Получаем ID
     $id = $this->request->param('id', 0);
 
+    // Выбираем 1 документ
     $log = Mango::instance()->find_one('Logs', array('_id' => new MongoId($id)));
 
+    // Если не получили документ
     if(is_null($log))
     {
-      Message::alert(__('Event #:id not found!', array(':id' => $id)));
+      // Информируем
+      Message::alert('События #' . $id . ' в журнале не обнаружено!');
 
-      Kohana::$log->add(Log::WARNING, 'An attempt to get the log event id: `:id`, which is not found!',
+      // Журналируем
+      Kohana::$log->add(Log::WARNING, 'Обнаружена попытка получить из  журнала событие с id: `:id`, которого нет!',
         array(
           ':id' => $id
         )
       );
 
+      // Перенаправляем с кодом 404 - не найдено
       if (! $this->_internal)
       {
         $this->request->redirect(Route::get('admin/log')->uri(), 404);
       }
     }
 
+    // Получаем пользователя по ID
     $user = User::lookup((int) $log['user']);
 
+    // Формируем отображаемое имя
     $log['user'] = $user->nick;
 
-    $this->title  = __('View event');
+    // Заголовок страницы
+    $this->title  = 'Просмотр события';
 
+    // Формируем представление
     $view = View::factory('admin/mango/log/view')
                 ->set('log', $log);
 
     $this->response->body($view);
   }
 
-  /** Delete the message from log */
+  /** Удаление сообщения журнала */
   public function action_delete()
   {
-    // Required privilege
+    // Требуемые привилегии
     if (class_exists('ACL'))
     {
       ACL::Required('delete logs');
     }
 
+    // Получаем ID
     $id = $this->request->param('id', 0);
 
+    // Выбираем 1 документ
     $log = Mango::instance()->find_one('Logs', array('_id' => new MongoId($id)));
 
+    // Если не получили документ
     if(is_null($log))
     {
-      Message::alert(__('Event #:id not found!', array(':id' => $id)));
+      // Информируем
+      Message::alert('События #' . $id . ' в журнале не обнаружено!');
 
-      Kohana::$log->add(Log::WARNING, 'An attempt to delete the log event id: `:id`, which is not found!',
+      // Журналируем
+      Kohana::$log->add(Log::WARNING, 'Обнаружена попытка удалить из  журнала событие с id: `:id`, которого нет!',
         array(
           ':id' => $id
         )
       );
 
+      // Перенаправляем с кодом 404 - не найдено
       if (! $this->_internal)
       {
         $this->request->redirect(Route::get('admin/log')->uri(), 404);
       }
     }
 
-    $this->title = __('Deleting log records');
+    $this->title = 'Удаление записи журнала';
 
     $view = View::factory('form/confirm')
                 ->set('action', Route::url('admin/log', array('action' => 'delete', 'id' => $id)))
-                ->set('title', 'Event #'.$id);
+                ->set('title', 'Событие #'.$id);
 
-    // If deletion is not desired, redirect to list
+    // Если удаление не подтверждено
     if (isset($_POST['no']) AND $this->valid_post())
     {
       $this->request->redirect(Route::get('admin/log')->uri(), 200);
     }
 
-    // If deletion is confirmed
+    // Если удаление подтверждено
     if (isset($_POST['yes']) AND $this->valid_post())
     {
       try
       {
-        Mango::instance()->remove('Logs', array('_id' => new MongoId($id)));
         Mango::instance()->remove(
-          'Logs',                           // Collection Name
-          array('_id' => new MongoId($id)), // Event ID
-          array("justOne" => TRUE)          // Remove at most one record
+          'Logs',                           // Имя коллекции
+          array('_id' => new MongoId($id)), // ID события
+          array("justOne" => TRUE)          // Удалить не более одной записи
         );
 
-        Message::notice(__('Message from the log has been removed.'));
+        Message::notice('Сообщение из журнала было удалено');
 
+        // Перенаправляем с кодом 200
         if (! $this->_internal)
         {
           $this->request->redirect(Route::get('admin/log')->uri(), 200);
@@ -160,12 +183,9 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
       }
       catch (Exception $e)
       {
-        Message::error(__('An error occurred when deleting the message: :msg',
-          array(
-            ':msg' => $e->getMessage()
-          )
-        ));
+        Message::error('Произошла ошибка при удалении сообщения: '.$e->getMessage());
 
+        // Перенаправляем с кодом 500
         if (! $this->_internal)
         {
           $this->request->redirect(Route::get('admin/log')->uri(), 500);
@@ -176,40 +196,38 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
     $this->response->body($view);
   }
 
-  /** Drop collection */
+  /** Очистка всего журнала */
   public function action_clear()
   {
-    // Required privilege
+    // Требуемые привилегии
     if (class_exists('ACL'))
     {
       ACL::Required('delete logs');
     }
 
-    $this->title = __('Drop system log');
+    // Формируем заголовок
+    $this->title = 'Очистка всего журнала';
 
     $view = View::factory('form/confirm')
                 ->set('action', Route::url('admin/log', array('action' => 'clear')))
-                ->set('title', 'All log events');
+                ->set('title', 'Все события из журнала');
 
-    // If deletion is not desired, redirect to list
+    // Если удаление не подтверждено
     if (isset($_POST['no']) AND $this->valid_post())
     {
       $this->request->redirect(Route::get('admin/log')->uri(), 200);
     }
 
-    // If deletion is confirmed
+    // Если очистка журнала подтверждена
     if (isset($_POST['yes']) AND $this->valid_post())
     {
       try
       {
         $responce = Mango::instance()->drop('Logs');
 
-        Message::notice(__('System log successfully cleared. Database message: :msg',
-          array(
-            ':msg' => $responce['msg']
-          )
-        ));
+        Message::notice('Журнал успешно очищен. Сообщение базы данных: '.$responce['msg']);
 
+        // Перенаправляем с кодом 200
         if (! $this->_internal)
         {
           $this->request->redirect(Route::get('admin/log')->uri(), 200);
@@ -218,12 +236,9 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
       }
       catch (Exception $e)
       {
-        Message::error(__('An error occurred when clearing the system log: :msg',
-          array(
-            ':msg' => $e->getMessage()
-          )
-        ));
+        Message::error('Произошла ошибка при очистке журнала: '.$e->getMessage());
 
+        // Перенаправляем с кодом 500
         if (! $this->_internal)
         {
           $this->request->redirect(Route::get('admin/log')->uri(), 500);
@@ -232,6 +247,7 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
     }
 
     $this->response->body($view);
+    
   }
 
 }

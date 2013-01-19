@@ -1,70 +1,74 @@
 # Mango Reader
 
-_Module that monitors all system events and recording them in a log using [MongoDB DBMS] (http://www.mongodb.org)!_
+_Модуль, который следит за всеми системными событиями и записывает их в журнал, используя [СУБД MongoDB] (http://www.mongodb.org)!_
 
 
-## Overview
+## Введение
 
-**MongoDB** (from "hu**mongo**us") is an open source document-oriented database system developed and supported by
-[10gen] (http://www.10gen.com/). It is part of the NoSQL family of database systems. Instead of storing data in
-tables as is done in a "classical" relational database, MongoDB stores structured data as JSON-like documents with
-dynamic schemas (MongoDB calls the format BSON), making the integration of data in certain types of applications
-easier and faster.
-
-
-## Description
-
-**Mango Reader** is a [Gleez CMS] (http://gleezcms.org/) module and it's a simple object wrapper for the
-[Mongo PHP] (http://php.net/manual/en/book.mongo.php) driver. It monitors your website, capturing system
-events in a log to be reviewed by an authorized individual at a later time. The log is simply a list of
-recorded events containing usage data, performance data, errors, warnings and operational information.
-
-It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.
+**MongoDB** (от "hu **mongo** us") это документно-ориентированная система управления базами данных (СУБД) с открытым исходным кодом
+разрабатываемая и поддерживаемая [10gen] (http://www.10gen.com/). Она является частью NoSQL-семейства систем баз данных.
+Вместо того, чтоб хранить данные в таблицах, как в "классических" реляционных базах данных, MongoDB хранит структурированные данные
+в виде JSON-подобных документов в динамических схемах (MongoDB использует формат BSON), позволяющая осуществлять интеграцию данных
+в определенных типах приложений проще и быстрее.
 
 
-## Current available versions
 
-- **0.1.1.1** for Gleez CMS 0.9.8.1 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+## Описание
 
+**Mango Reader** это модуль для [Cerber CMS] (http://cerbercms.klay.me/) и лн является простой оболочкой над объектом
+драйвера [Mongo PHP] (http://php.net/manual/en/book.mongo.php). Модуль отслеживает системные события на вашем сайте и заносит их
+в журнал. Привилегированным пользователям предоставляется возможность просмотра журнала. Журнал это простой список из
+зарегистрированных событий содержащих в себе информацию об использовании ресурсов сайта, данные о производительности, ошибки,
+предупреждения и другую оперативную информацию.
 
-## System Requirements
-
-- [PHP] (http://php.net/) 5.3 or higher
-- [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
-- [Gleez CMS] (http://gleezcms.org/) 0.9.8.1 or higher
-- ACL (optional for module specific permissions)
-
-
-## Features
-
-- View list of all events
-- View single log event
-- Delete event from log
-- Drop system log
+Очень важно проверять отчёты системных событий на регулярной основе, т.к. это единственный способ узнать, что же на самом деле
+происходит на Вашем сайте.
 
 
-## Future Plans
+## Текущие доступные версии
 
-- Divide the `Mango_Database` Class into the following three:
- - `Mango_Database` Class: Database and connection managing
- - `Mango_Collection` Class: Collection managing
- - `Mango_Document` Class: Document managing
-- Implement Profiling
-- Implement Session Storage *(in the long term)*
-- More pure and correct English in the documentation and the string resources
+- **0.1.1.1** для Cerber CMS 0.1.1.0 или выше [Скачать] (https://github.com/sergeyklay/gleez-mango/archive/cerber.zip)
+- **0.1.1.1** для Gleez CMS 0.9.8.1 или выше [Скачать] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
 
 
-## Installation & Usage
+## Системные требования
 
-- [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip) module from its GitHub [homepage] (https://github.com/sergeyklay/gleez-mango) 
+- [PHP] (http://php.net/) 5.3 или выше
+- [PHP-расширение] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 или выше
+- [Cerber CMS] (http://gleezcms.org/) 0.1.1.0 или выше
+- ACL (опционально, для специфичных модулю привилегий)
 
-- Include Mango Reader into your module path. For example:
+
+## Возможности
+
+- Просмотр списка событий
+- Просмотр конкретного события
+- Удаление события из журнала
+- Очистка всего журнала
+
+
+## Планы на будущее
+
+- Разделить класс `Mango_Database` на три следующие класса:
+ - Класс `Mango_Database`: Управление базой данных и соединениями
+ - Класс `Mango_Collection`: Управление коллекциями
+ - Класс `Mango_Document`: Управление документами
+- Реализовать профилирование
+- Реализовать хранение сессий *(в далёкой перспективе)*
+- Более чистый и корректный английский в документации и строках
+
+
+## Установка и использование
+
+- [Скачать] (https://github.com/sergeyklay/gleez-mango/archive/cerber.zip) модуль с официальной [страницы] (https://github.com/sergeyklay/gleez-mango) на GitHub
+
+- Включить Mango Reader в ваш путь для поиска модулей. Например:
 ```php
   /**
    * Enable modules. Modules are referenced by a relative or absolute path.
    */
   Kohana::modules(array(
-    'gleez'     => MODPATH.'gleez',      // Gleez Core Module
+    'cerber'    => MODPATH.'cerber',     // Cerber Core Module
     'user'      => MODPATH.'user',       // User and group Administration
     'cache'     => MODPATH.'cache',      // Caching with multiple backends
     'database'  => MODPATH.'database',   // Database access
@@ -77,7 +81,7 @@ It is vital to check the log report on a regular basis as it is often the only w
   ));
 ```
 
-- Attach the MangoDB write to logging:
+- Присоеденить MangoDB к объекту ведения журнала:
 ```php
   // Disable logging into files
   // Kohana::$log->attach(new Gleez_Log_File(APPPATH.'logs'));
@@ -86,32 +90,32 @@ It is vital to check the log report on a regular basis as it is often the only w
   Kohana::$log->attach(new Log_Mango());
 ```
 
-- For Routes see `MODPATH/<mango_dir>/init.php`
+- Роутинг смотрите тут `MODPATH/<mango_dir>/init.php`
 
-- Use `MODPATH/<mango_dir>/config/mango.php` as an example for creating `APPATH/config/mango.php` with your individual settings
-
-
-## Contributors
-
-- [Sergey Yakovlev] (https://github.com/sergeyklay) - Code
-
-Now that you're here, why not start contributing as well? :)
+- Используйте `MODPATH/<mango_dir>/config/mango.php` как пример для создания  `APPATH/config/mango.php` с вашими индивидуальными настройками
 
 
-##  Special thanks to
+## Авторы
 
-- [sign] (https://github.com/sergey-sign) - Code
-- [sandeepone] (https://github.com/sandeepone) - Gleez Team
+- [Яковлев Сергей] (https://github.com/sergeyklay) - Код
+
+Теперь, когда вы здесь, почему бы не начать вносить вклад, а? :)
 
 
-## Changelog
+## Отдельная благодарность
 
-**0.1.1.1** - *January 19 2013*
+- [sign] (https://github.com/sergey-sign) - Код
+- [sandeepone] (https://github.com/sandeepone) - Команда Gleez
 
-- Added I18n ability
-- Added ability to clear all messages from the log
-- Minor changes (see commits diff)
 
-**0.1.1.0** - *January 17 2013*
+## История версий
 
-- Initial release
+**0.1.1.1** - *19 января 2013*
+
+- Добавлена возможность локализации модуля (в версии для Gleez CMS)
+- Добавлена возможность очистки всего журнала
+- Незначительные изменения (смотрите сравнение комитов и файлов)
+
+**0.1.1.0** - *17 января 2013*
+
+- Первый релиз

@@ -1,31 +1,40 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
+/**
+ * Основные настройки модуля Mango Reader
+ *
+ * @package   Mango
+ * @category  Settings
+ * @author    Яковлев Сергей (me@klay.me)
+ * @version   0.1.1.1
+ * @copyright (c) 2013 Яковлев Сергей
+ * @license   GPLv3
+ */
 
 return array(
-
   /**
-   * Configuration Name
+   * @var array Название конфигурации
    *
-   * You use this name when initializing a new MongoDB instance
+   * Используется при инициализации нового экземпляра MongoDB
    *
-   *  // Example:
-   *  $db = MongoDB::instance('default');
+   *    // Пример использования:
+   *    $db = Mango::instance('default');
    */
   'default' => array(
 
-    /** @var array Connection Setup */
+    /** @var array Настройки соединения */
     'connection' => array(
 
-      /** @var string Database host */
+      /** @var string Хост базы данных */
       //'hostname' => '192.168.0.1',
 
-      /** @var string Database name */
+      /** @var string Имя базы данных */
       //'database'  => 'Cerber',
 
-      /** @var string Auth params */
+      /** @var string Аутентификация */
       //'username'  => 'username',
       //'password'  => 'password',
 
-      /** @var array Additional options */
+      /** @var array Дополнительные опции */
       //'options'   => array(
       //  'persist'    => 'persist_id',
       //  'timeout'    => 1000,

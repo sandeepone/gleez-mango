@@ -1,41 +1,43 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Class event logging using the database MongoDB
+ * Класс записи событий в журнал, используя базу данных MongoDB
  *
- * ### System Requirements
+ * ### Системные требования
  *
- * - PHP 5.3 or higher
- * - PHP-extension Mongodb 1.3 or higher
- * - Mango Reader module 0.1.1.1 or higher
+ *  - PHP 5.3 или старше
+ *  - PHP-расширение Mongodb 1.3 или старше
+ *  - Модуль Mango Reader 0.1.1.1 или старше
  *
- * @package   Mango
+ * @package   Cerber
  * @category  Logging/Mango
- * @author    Sergey Yakovlev
- * @copyright (c) 2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @author    Яковлев Сергей (me@klay.me)
+ * @version   0.1.1.1
+ * @copyright (c) 2013 Яковлев Сергей
+ * @license   GPLv3
  */
 
 class Mango_Log_Mango extends Log_Writer {
 
   /**
-   * @var string Collection for log
+   * @var string Коллекция для записи журнала
    *
-   * Use capped collection to support high-bandwidth inserts
+   * Используйте коллекцию фиксированного размера, для поддержки высокой
+   * пропускной способности операций вставки
    * @link http://docs.mongodb.org/manual/core/capped-collections/ Capped Collections
    */
   protected $_collection;
 
-  /** @var string Database instace name */
+  /** @var string Название экземпляра базы данных */
   protected $_name;
 
   /**
-   * Constructor
+   * Конструктор класса
    *
-   *    // Example:
+   *    // Пример использования
    *    $writer = new Log_Mango($collection);
    *
-   * @param   string  $collection Collection Name [Optional]
-   * @param   string  $name       Database instance name [Optional]
+   * @param   string  $collection Название коллекции [Опционально]
+   * @param   string  $name       Название экземпляра базы данных [Опционально]
    */
   public function __construct($collection = 'Logs', $name = 'default')
   {
@@ -44,13 +46,13 @@ class Mango_Log_Mango extends Log_Writer {
   }
 
   /**
-   * Save messages to MongoDB collection
+   * Запись сообщений в MongoDB коллекцию
    *
-   * @param   array   $messages   An array of messages
+   * @param   array   $messages   Массив сообщений
    */
   public function write(array $messages)
   {
-    // Descriptive array
+    // Описательный массив
     $info = array
     (
       'host'  => Request::$client_ip,
@@ -59,24 +61,24 @@ class Mango_Log_Mango extends Log_Writer {
       'url'   => Text::plain(Request::initial()->uri()),
     );
 
-    // Message to log
+    // Сообщение для записи в журнал
     $logs = array();
 
-    foreach ($messages as $message)
-    {
+		foreach ($messages as $message)
+		{
       if(isset($message))
       {
         $message['type']  = $this->_log_levels[$message['level']];
-        $message['time']  =  new MongoDate(strtotime($message['time']));
+        $message['time']  = new MongoDate(strtotime($message['time']));
 
-        // Merging descriptive array and the current message
+        // Слияние описательного массива и текущего сообщения
         $logs[] = array_merge($info, $message);
       }
     }
 
     if(! empty($logs))
     {
-      // Record to a collection
+      // Запись сообщения в коллекцию
       Mango::instance($this->_name)->batch_insert($this->_collection, $logs);
     }
   }

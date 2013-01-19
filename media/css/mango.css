@@ -1,4 +1,4 @@
-/* For those times when Tweeter Bootstrap not exists */
+/* Для тех случаев, когда не установлен Twitter Bootstrap */
 .label{
   display:inline-block;
   padding:2px 4px;
@@ -14,8 +14,8 @@
   -moz-border-radius:3px;
   border-radius:3px;
 }
-/* Own module styles */
-.label-emergency{background-color:#333;}
+/* Собственные стили модуля */
+.label-emergency{background-color:#333333;}
 .label-alert{background-color:#f89406;}
 .label-critical{background-color:#b94a48;}
 .label-error{background-color:#b94a48;}
@@ -23,4 +23,4 @@
 .label-notice{background-color:#3a87ad;}
 .label-info{background-color:#468847;}
 .label-debug{background-color:#3a87ad;}
-.label-srace{background-color:#333;}
+.label-srace{background-color:#333333;}

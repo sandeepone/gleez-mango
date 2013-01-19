@@ -1,20 +1,39 @@
 <?php defined("SYSPATH") OR die("No direct script access.");
+/**
+ * Представление для отображения списка событий
+ *
+ * @package   Mango
+ * @category  View
+ * @author    Яковлев Сергей (me@klay.me)
+ * @version   0.1.1.1
+ * @copyright (c) 2013 Яковлев Сергей
+ * @license   GPLv3
+ */
+?>
 
 <div class="help">
-  <?php echo __('The log component monitors your website, capturing system events in a log to be reviewed by an authorized individual at a later time. The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information. It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.'); ?>
+  <p class="lead">
+    Модуль Mango Reader отслеживает системные события на вашем сайте и заносит
+    их в журнал. Привилегированным пользователям предоставляется возможность
+    просмотра журнала. Журнал это простой список из зарегистрированных событий
+    содержащих в себе информацию  об использовании ресурсов сайта, данные о
+    производительности, ошибки, предупреждения и другую оперативную информацию.
+    Очень важно проверять отчёты системных событий на регулярной основе, т.к.
+    это единственный способ узнать, что же на самом деле происходит на Вашем сайте.
+  </p>
 </div>
 
-<?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' =>'clear')), '<i class="icon-trash"></i> '.__('Clear all'), array('class' => 'btn btn-danger pull-right', 'title' => __('Clear all messages from the log'))); ?>
+<?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' =>'clear')), '<i class="icon-trash"></i> Очистить всё', array('class' => 'btn btn-danger pull-right', 'title' => 'Очистить все сообщения из журнала')); ?>
 <div class="clearfix"></div><br>
 
 <table id="log-admin-list" class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
-      <th><?php echo __('Date') ?></th>
-      <th><?php echo __('Type') ?></th>
-      <th><?php echo __('Message') ?></th>
-      <th><?php echo __('Host') ?></th>
-      <th><?php echo __('URL') ?></th>
+      <th>Дата</th>
+      <th>Тип</th>
+      <th>Сообщение</th>
+      <th>IP</th>
+      <th>URL</th>
     </tr>
   </thead>
   <tbody>
@@ -27,7 +46,7 @@
         </span>
       </td>
       <td>
-        <?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' => 'view', 'id' => $log['_id'] )), Text::plain(Text::limit_chars($log['body'], 50)), array('title'=> __('View event'))); ?>
+        <?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' => 'view', 'id' => $log['_id'] )), Text::plain(Text::limit_chars($log['body'], 50)), array('title'=> 'Просмотр события')); ?>
       </td>
       <td><?php echo $log['host']; ?></td>
       <td><?php echo Text::limit_chars($log['url'], 25); ?></td>

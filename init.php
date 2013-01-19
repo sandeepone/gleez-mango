@@ -1,54 +1,67 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
- /**
- * Setting the Routes
+/**
+ * Карта маршрутов
  *
- * @package    Gleez
- * @category   Routing/Mango
- * @author     Sergey Yakovlev
- * @copyright  (c) 2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @package   Mango
+ * @category  Routing/Mango
+ * @author    Яковлев Сергей (me@klay.me)
+ * @version   0.1.1.1
+ * @copyright (c) 2013 Яковлев Сергей
+ * @license   GPLv3
  */
 
-/** Routing setup */
+/** Установка маршрутизации */
 if (! Route::cache())
 {
-  Route::set('admin/log', 'admin/logs(/<action>)(/p<page>)(/<id>)', array(
+  /**
+   * Управление журналом
+   *
+   *  - Просмотр списка сообщений:      `site.com/admin/logs/list`
+   *  - Просмотр конкретного сообщения: `site.com/admin/logs/view/<id>`
+   *  - Удаление сообщения:             `site.com/admin/logs/delete/<id>`
+   *  - Очистка всех сообщений:         `site.com/admin/logs/clear`
+   */
+  Route::set('admin/log', 'admin/logs(/<action>)(/p<page>)(/<id>)',
+    array(
       'id'      => '([A-Za-z0-9]+)',
       'page'    => '\d+',
-      'action'  => 'list|view|delete',
+      'action'  => 'list|view|delete|clear',
     ))
     ->defaults(array(
       'directory'   => 'admin/mango',
       'controller'  => 'log',
       'action'      => 'list',
   ));
+
 }
 
 /**
- * Define Module specific Permissions
+ * Определение привилегий специфичных модулю если ACL присутствует в системе.
  *
- * Definition of user privileges by default if the ACL is present in the system.
- * Note: Parameter `restrict access` indicates that these privileges have serious
- * implications for safety.
+ * Внимание: параметр `restrict access` указывает на то,
+ * что данные привилегии имеют серьёзные последствия для безопасности.
  *
- * @uses ACL Used to define the privileges
+ * @uses ACL Используется для определения привилегий
  */
 if ( class_exists('ACL') && ! ACL::cache() )
   {
+    // Привелегии связанные с управлением журналами
     ACL::set('Mango Reader', array
     (
-      'view logs' =>  array (
-        'title'           => __('View logs'),
-        'restrict access' => TRUE,
-        'description'     => __('View all log events'),
+      'view logs' =>  array
+      (
+        'title'           => 'Просмотр журнал',
+        'restrict access' => FALSE,
+        'description'     => 'Просмотр всех событий заносящихся в журнал',
       ),
-      'delete logs' =>  array (
-        'title'           => __('Cleanup logs'),
+      'delete logs' =>  array
+      (
+        'title'           => 'Очистка журнала',
         'restrict access' => TRUE,
-        'description'     => __('Deleting events from the log'),
+        'description'     => 'Удаление выборочных событий или очистка всего журнала',
       ),
     ));
 
-  /** Cache the module specific permissions in production */
+  // В продакшене кешировать разрешения
   ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
