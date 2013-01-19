@@ -18,7 +18,7 @@ if (! Route::cache())
       'action'  => 'list|view|delete',
     ))
     ->defaults(array(
-      'directory'   => 'admin/mango',
+      'directory'   => 'admin',
       'controller'  => 'log',
       'action'      => 'list',
   ));
@@ -34,20 +34,20 @@ if (! Route::cache())
  * @uses ACL Used to define the privileges
  */
 if ( class_exists('ACL') && ! ACL::cache() )
-  {
-    ACL::set('Mango Reader', array
-    (
-      'view logs' =>  array (
-        'title'           => __('View logs'),
-        'restrict access' => TRUE,
-        'description'     => __('View all log events'),
-      ),
-      'delete logs' =>  array (
-        'title'           => __('Cleanup logs'),
-        'restrict access' => TRUE,
-        'description'     => __('Deleting events from the log'),
-      ),
-    ));
+{
+  ACL::set('Mango Reader', array
+  (
+    'view logs' =>  array (
+      'title'           => __('View logs'),
+      'restrict access' => TRUE,
+      'description'     => __('View all log events'),
+    ),
+    'delete logs' =>  array (
+      'title'           => __('Cleanup logs'),
+      'restrict access' => TRUE,
+      'description'     => __('Deleting events from the log'),
+    ),
+  ));
 
   /** Cache the module specific permissions in production */
   ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
