@@ -31,8 +31,10 @@ class Mango_Log_Mango extends Log_Writer {
   /**
    * Constructor
    *
-   *    // Example:
-   *    $writer = new Log_Mango($collection);
+   * Example:<br>
+   * <code>
+   *   $writer = new Log_Mango($collection);
+   * </code>
    *
    * @param   string  $collection Collection Name [Optional]
    * @param   string  $name       Database instance name [Optional]
@@ -67,7 +69,7 @@ class Mango_Log_Mango extends Log_Writer {
       if(isset($message))
       {
         $message['type']  = $this->_log_levels[$message['level']];
-        $message['time']  =  new MongoDate(strtotime($message['time']));
+        $message['time']  = new MongoDate(strtotime($message['time']));
 
         // Merging descriptive array and the current message
         $logs[] = array_merge($info, $message);
