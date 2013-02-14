@@ -24,14 +24,15 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Current available versions
 
-- **0.1.1.2** for Gleez CMS 0.9.8.1 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.1.3** for Gleez CMS 0.9.8.1 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
 
 
 ## System Requirements
 
 - [PHP] (http://php.net/) 5.3 or higher
-- [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
 - [Gleez CMS] (http://gleezcms.org/) 0.9.8.1 or higher
+- [MondoDB] (http://mongodb.org/) 2.3.3 or higher
+- [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
 - ACL (optional for module specific permissions)
 
 
@@ -56,7 +57,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Installation & Usage
 
-- [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip) module from its GitHub [homepage] (https://github.com/sergeyklay/gleez-mango) 
+- [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip) module from its GitHub [homepage] (https://github.com/sergeyklay/gleez-mango)
 
 - Include Mango Reader into your module path. For example:
 ```php
@@ -108,18 +109,21 @@ Now that you're here, why not start contributing as well? :)
 
 ## Changelog
 
-**0.1.1.2** - *January 22 2013*
+**0.1.1.3** - *February 14 2013*
+- Added ```php Mango::instance()->config(); ``` method
+- Fixed constructor (added param `$config` ability)
+- Amended API PHPDoc
+- Minor changes (see [commits] (https://github.com/sergeyklay/gleez-mango/commits/master) diff)
 
+**0.1.1.2** - *January 22 2013*
 - Modified Mango singleton
 - Modified module file system
 - Minor changes (see [commits] (https://github.com/sergeyklay/gleez-mango/commits/master) diff)
 
 **0.1.1.1** - *January 19 2013*
-
 - Added I18n ability
 - Added ability to clear all messages from the log
 - Minor changes (see [commits] (https://github.com/sergeyklay/gleez-mango/commits/master) diff)
 
 **0.1.1.0** - *January 17 2013*
-
 - Initial release

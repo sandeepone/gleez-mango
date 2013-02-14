@@ -1,7 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
+ * ### Introduction
+ *
  * This class wraps the functionality of Mongo (connection)
  * and MongoDB (database object) into one class.
+ *
+ * ### Usage
  *
  * When used with Gleez it can be instantiated simply by:<br>
  * <code>
@@ -17,16 +21,22 @@
  *   $db = Mango::instance('mongo', array('database' => 'test'));
  * </code>
  *
+ * ### Configuration settings
+ *
+ * Mango Reader uses configuration groups to create database instances.
+ *
  * ### System Requirements
  *
  * - PHP 5.3 or higher
  * - PHP-extension MongoDB 1.3 or higher
+ * - MongoDB 2.2.3 or higher
  *
  * @package   Mango\Database
  * @author    Sergey Yakovlev - Gleez
- * @version   0.1.1.2
- * @copyright (c) 2013 Gleez Technologies
+ * @version   0.1.1.3
+ * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
+ *
  * @link      http://php.net/manual/ru/book.mongo.php MongoDB Native Driver
  *
  * @todo Divide this class into the following three:
@@ -60,14 +70,14 @@ class Mango_Database {
   /** @var MongoDB The database instance for the database name chosen by the config */
   protected $_db;
 
-  /** @var string Database name by default */
-  const MANGO_DB_NAME = 'Gleez';
+  /** Database name by default */
+  const DB_NAME = 'Gleez';
 
-  /** @var string Module version */
-  const MANGO_VERSION = '0.1.1.2';
+  /** Module version */
+  const VERSION = '0.1.1.3';
 
   /** Module name */
-  const MANGO_NAME = 'Mango Reader';
+  const NAME = 'Mango Reader';
 
   /**
    * Creates a singleton of a Mango_Database group.
@@ -89,10 +99,11 @@ class Mango_Database {
    * </code>
    *
    * @param   string    $group  Config group name [Optional]
+   * @param   array     $config Pass a configuration array to bypass the Kohana config [Optional]
    * @return  Mango_Database    Database instance
    * @throws  Gleez_Exception
    */
-  public static function instance($group = NULL)
+  public static function instance($group = NULL, $config = NULL)
   {
     // If there is no group supplied
     if (is_null($group))
@@ -107,14 +118,17 @@ class Mango_Database {
       return Mango::$instances[$group];
     }
 
-    // Load the configuration
-    $config = Kohana::$config->load('mango');
+    if (is_null($config))
+    {
+      // Load the configuration
+      $config = Kohana::$config->load('mango');
+    }
 
     if (! $config->offsetExists($group))
     {
       throw new Gleez_Exception('Failed to load :module group: :group',
         array(
-          ':module' => self::MANGO_NAME,
+          ':module' => self::NAME,
           ':group'  => $group
         )
       );
@@ -148,7 +162,7 @@ class Mango_Database {
 
     $this->_db = isset($this->_config['connection.database'])
       ? $this->_config['connection.database']
-      : Mango::MANGO_DB_NAME;
+      : Mango::DB_NAME;
 
     $host = isset($this->_config['connection.hostname'])
       ? $this->_config['connection.hostname']
@@ -172,6 +186,30 @@ class Mango_Database {
 
     // Store the database instance
     Mango::$instances[$name] = $this;
+  }
+
+  /**
+   * Getter and setter for the configuration.
+   *
+   * If no argument provided, the current configuration is returned.
+   * Otherwise the configuration is set to this class.
+   *
+   * Get a configuration setting:<br>
+   * <code>
+   *  $config = $db->config();
+   * </code>
+   *
+   * @param   mixed $key    key to set to array, either array or config path
+   * @param   mixed $value  value to associate with key
+   *
+   * @return  mixed
+   */
+  public function config($key = NULL, $value = NULL)
+  {
+    if (is_null($key))
+    {
+      return $this->_config;
+    }
   }
 
   final public function __destruct()
