@@ -31,7 +31,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 - [PHP] (http://php.net/) 5.3 or higher
 - [Gleez CMS] (http://gleezcms.org/) 0.9.8.1 or higher
-- [MondoDB] (http://mongodb.org/) 2.3.3 or higher
+- [MondoDB] (http://mongodb.org/) 2.2.3 or higher
 - [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
 - ACL (optional for module specific permissions)
 
