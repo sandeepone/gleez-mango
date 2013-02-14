@@ -4,11 +4,11 @@
  *
  * ### System Requirements
  *
- * - [PHP] (http://php.net/) 5.3 or higher
- * - [Gleez CMS] (http://gleezcms.org/) 0.9.8.1 or higher
- * - [MondoDB] (http://mongodb.org/) 2.3.3 or higher
- * - [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
- * - ACL *(optional for module specific permissions)*
+ * - PHP 5.3 or higher
+ * - Gleez CMS 0.9.8.1 or higher
+ * - MondoDB 2.3.3 or higher
+ * - PHP-extension MongoDB 1.3 or higher
+ * - ACL for module specific permissions [Optional]
  *
  * @package   Mango\Admin\Controller
  * @author    Sergey Yakovlev - Gleez
