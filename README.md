@@ -24,13 +24,13 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Current available versions
 
-- **0.1.1.3** for Gleez CMS 0.9.8.1 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.1.3** for Gleez CMS 0.9.8.2 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
 
 
 ## System Requirements
 
 - [PHP] (http://php.net/) 5.3 or higher
-- [Gleez CMS] (http://gleezcms.org/) 0.9.8.1 or higher
+- [Gleez CMS] (http://gleezcms.org/) 0.9.8.2 or higher
 - [MondoDB] (http://mongodb.org/) 2.3.3 or higher
 - [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
 - ACL (optional for module specific permissions)
@@ -110,7 +110,7 @@ Now that you're here, why not start contributing as well? :)
 ## Changelog
 
 **0.1.1.3** - *February 14 2013*
-- Added ```php Mango::instance()->config(); ``` method
+- Added Mango config() setter and getter
 - Fixed constructor (added param `$config` ability)
 - Amended API PHPDoc
 - Minor changes (see [commits] (https://github.com/sergeyklay/gleez-mango/commits/master) diff)

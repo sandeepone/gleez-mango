@@ -39,12 +39,7 @@
  *
  * @link      http://php.net/manual/ru/book.mongo.php MongoDB Native Driver
  *
- * @todo Divide this class into the following three:
- *  - Mango_Database (Database and connection manage)
- *  - Mango_Collection (Collection manage)
- *  - Mango_Document (Document manage)
- *
- * @todo Implement profiling
+ * @todo      Implement profiling.
  */
 
 class Mango_Database {
@@ -83,14 +78,30 @@ class Mango_Database {
    * Creates a singleton of a Mango_Database group.
    * If no group is supplied the __default__ Mongo group is used.
    *
+   * ### Create an instance of a group
+   *
+   * This code will assume the `my_group` configuration from
+   * the `APPPATH/config/mongo.php`
+   * (`MODPATH/<mango_dir>/config/mango.php` by default) file:<br>
+   * <code>
+   *   $foo_group = Mango::instance('my_group');
+   * </code>
+   *
    * Create an instance of the default group:<br>
    * <code>
    *   $default_group = Mango::instance();
    * </code>
    *
-   * Create an instance of a group:<br>
+   * Alternatively it may be instantiated with the name and
+   * configuration specified as arguments:<br>
    * <code>
-   *   $foo_group = Mango::instance('foo');
+   *  $my_group = Mango::instance('my_group', array(
+   *    'connection' => array(
+   *      'hostname' => '192.168.0.1',
+   *      'database' => 'Gleez'
+   *      'username'  => '...',
+   *    );
+   * ));
    * </code>
    *
    * Access an instantiated group directly:<br>
@@ -100,7 +111,7 @@ class Mango_Database {
    *
    * @param   string    $group  Config group name [Optional]
    * @param   array     $config Pass a configuration array to bypass the Kohana config [Optional]
-   * @return  Mango_Database    Database instance
+   * @return  Mango     MongoDB instance
    * @throws  Gleez_Exception
    */
   public static function instance($group = NULL, $config = NULL)
@@ -147,15 +158,14 @@ class Mango_Database {
    *
    * @param   string    $name   Database instance name
    * @param   array     $config MongoDB config
-   * @throws  Exception         In the absence of the php-mongo extension
+   *
    * @throws  Kohana_Exception  In the absence of of mandatory configuration settings
    */
   protected function __construct($name, array $config)
   {
-    if (! extension_loaded('mongo'))
-    {
-      throw new Exception('The php-mongo extension is not installed or is disabled.');
-    }
+
+    // System Requirements check
+    $this->system_check();
 
     $this->_name = $name;
     $this->_config = $config;
@@ -194,13 +204,33 @@ class Mango_Database {
    * If no argument provided, the current configuration is returned.
    * Otherwise the configuration is set to this class.
    *
+   * Overwrite all configuration:<br>
+   * <code>
+   *  $db->config(array(
+   *    'connection' => array(
+   *      'hostname' => '192.168.0.1',
+   *      'database'  => '...'
+   *    )
+   *  ));
+   * </code>
+   *
+   * Modify exists or set a new configuration setting:<br>
+   * <code>
+   *  $db->config('connection', array(
+   *    'username' => 'gleez_user',
+   *  ));
+   * </code>
+   *
    * Get a configuration setting:<br>
    * <code>
+   *  $config = $db->config('connection', 'hostname');
+   *  $config = $db->config('connection');
    *  $config = $db->config();
    * </code>
    *
    * @param   mixed $key    key to set to array, either array or config path
    * @param   mixed $value  value to associate with key
+   * @uses    Arr::get
    *
    * @return  mixed
    */
@@ -210,6 +240,67 @@ class Mango_Database {
     {
       return $this->_config;
     }
+
+    if (is_array($key))
+    {
+      $this->_config = $key;
+    }
+    else
+    {
+      if (is_null($value))
+      {
+        return Arr::get($this->_config, $key, array());
+      }
+
+      if (is_array($value))
+      {
+        $this->_config = Arr::merge($this->_config, array($key => $value));
+      }
+      else
+      {
+        return Arr::get($this->_config[$key], $value);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * Check System Requirements
+   *
+   * @throws  Gleez_Exception   In the absence of the php-mongo extension
+   * @throws  Gleez_Exception   When PHP version is not &gt;= 5.3
+   * @throws  Gleez_Exception   When Gleez version is not &gt;= 0.9.8.2
+   * @return  boolean
+   */
+  public function system_check()
+  {
+    if ( ! extension_loaded('mongo'))
+    {
+      throw new Gleez_Exception('The php-mongo extension is not installed or is disabled.');
+    }
+
+    if ( ! version_compare(PHP_VERSION, '5.3', '>='))
+    {
+      throw new Gleez_Exception(':module requires PHP 5.3 or newer, this version is :php_version.',
+        array(
+          ':module' => self::NAME,
+          ':php_version' => PHP_VERSION
+        )
+      );
+    }
+
+    if ( ! version_compare(Gleez::VERSION, '0.9.8.2', '>='))
+    {
+      throw new Gleez_Exception(':module requires Gleez Core 0.9.8.2 or newer, this version is :gleez_version.',
+        array(
+          ':module' => self::NAME,
+          ':gleez_version' => Gleez::VERSION
+        )
+      );
+    }
+
+    return TRUE;
   }
 
   final public function __destruct()
@@ -289,7 +380,7 @@ class Mango_Database {
       $host = ini_get('mongo.default_host').':'.ini_get('mongo.default_port');
     }
 
-    if (! is_null($user) AND ! is_null($passwd))
+    if ( ! is_null($user) AND ! is_null($passwd))
     {
       return 'mongodb://' . $user . ':' . $passwd . '@' . $host . '/' . $this->_db;
     }
@@ -299,6 +390,10 @@ class Mango_Database {
 
   /**
    * Get an instance of MongoDB directly
+   *
+   * <code>
+   *  Mango::instance()->db();
+   * </code>
    *
    * @return MongoDB
    */
