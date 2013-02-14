@@ -3,7 +3,6 @@
  * Admin Controller Class for control logging
  *
  * ### System Requirements
- *
  * - PHP 5.3 or higher
  * - Gleez CMS 0.9.8.1 or higher
  * - MondoDB 2.3.3 or higher
@@ -202,7 +201,7 @@ class Controller_Admin_Log extends Controller_Admin {
     {
       try
       {
-        $responce = Mango::instance()->drop('Logs');
+        $responce = Mango::instance()->drop_collection('Logs');
 
         Message::success(__('System log successfully cleared. Database message: :msg',
           array(

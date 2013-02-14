@@ -26,7 +26,6 @@
  * Mango Reader uses configuration groups to create database instances.
  *
  * ### System Requirements
- *
  * - PHP 5.3 or higher
  * - PHP-extension MongoDB 1.3 or higher
  * - MongoDB 2.2.3 or higher
@@ -42,7 +41,7 @@
  * @todo      Implement profiling.
  */
 
-class Mango_Database {
+class Mango_Database implements Mango_Core {
 
   /** @var array Mango_Database instances */
   public static $instances = array();
@@ -95,12 +94,12 @@ class Mango_Database {
    * Alternatively it may be instantiated with the name and
    * configuration specified as arguments:<br>
    * <code>
-   *  $my_group = Mango::instance('my_group', array(
-   *    'connection' => array(
-   *      'hostname' => '192.168.0.1',
-   *      'database' => 'Gleez'
-   *      'username'  => '...',
-   *    );
+   *  $my_group = Mango::instance('my_group', array(<br>
+   *    'connection' => array(<br>
+   *      'hostname' => '192.168.0.1',<br>
+   *      'database' => 'Gleez'<br>
+   *      'username'  => '...',<br>
+   *    );<br><br>
    * ));
    * </code>
    *
@@ -206,26 +205,26 @@ class Mango_Database {
    *
    * Overwrite all configuration:<br>
    * <code>
-   *  $db->config(array(
-   *    'connection' => array(
-   *      'hostname' => '192.168.0.1',
-   *      'database'  => '...'
-   *    )
+   *  $db->config(array(<br>
+   *    'connection' => array(<br>
+   *      'hostname' => '192.168.0.1',<br>
+   *      'database'  => '...'<br>
+   *    )<br>
    *  ));
    * </code>
    *
    * Modify exists or set a new configuration setting:<br>
    * <code>
-   *  $db->config('connection', array(
-   *    'username' => 'gleez_user',
+   *  $db->config('connection', array(<br>
+   *    'username' => 'gleez_user',<br>
    *  ));
    * </code>
    *
    * Get a configuration setting:<br>
    * <code>
-   *  $config = $db->config('connection', 'hostname');
-   *  $config = $db->config('connection');
-   *  $config = $db->config();
+   *  $config = $db->config('connection', 'hostname');<br>
+   *  $config = $db->config('connection');<br>
+   *  $config = $db->config();<br>
    * </code>
    *
    * @param   mixed $key    key to set to array, either array or config path
@@ -303,6 +302,9 @@ class Mango_Database {
     return TRUE;
   }
 
+  /**
+   * Class destructor
+   */
   final public function __destruct()
   {
     try
@@ -329,6 +331,7 @@ class Mango_Database {
    * @param   array   $args   Arguments [Optional]
    * @param   array   $values The values passed to the command [Optional]
    * @return  mixed   Responce the result of the method by passing in a `$cmd`
+   * @return  boolean FALSE if command not found
    */
   public function _call($cmd, array $args = array(), $values = NULL)
   {
@@ -357,9 +360,14 @@ class Mango_Database {
       case 'remove':
         $responce = $c->remove($args['criteria'], $args['options']);
       break;
-      case 'drop':
+      case 'save':
+        $responce = $c->save($args['criteria'], $args['options']);
+      break;
+      case 'drop_collection':
         $responce = $c->drop();
       break;
+      default:
+        $responce = FALSE;
     }
 
     return $responce;
@@ -391,6 +399,7 @@ class Mango_Database {
   /**
    * Get an instance of MongoDB directly
    *
+   * Example:<br>
    * <code>
    *  Mango::instance()->db();
    * </code>
@@ -455,6 +464,11 @@ class Mango_Database {
   /**
    * Counting documents in a collection
    *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->count('Users', array('sity' => 'Dubai')));
+   * </code>
+   *
    * @param   string  $collection Collection Name
    * @param   array   $query      NoSQL query [Optional]
    * @return  integer Amount of documents
@@ -471,6 +485,11 @@ class Mango_Database {
 
   /**
    * Receives documents from the collection
+   *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->find('Users', array('sity' => 'Moscow'), array('email')));
+   * </code>
    *
    * @param   string  $collection Collection Name
    * @param   array   $query      NoSQL query [Optional]
@@ -491,6 +510,11 @@ class Mango_Database {
   /**
    * Gets 1 document from the collection
    *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->find_one('Users', array('_id' => new MongoId($id)));
+   * </code>
+   *
    * @param   string  $collection Collection Name
    * @param   array   $query      NoSQL query [Optional]
    * @param   array   $fields     Fields which are looking for in the request [Optional]
@@ -510,6 +534,11 @@ class Mango_Database {
   /**
    * Deleting a document from a collection
    *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->remove('Users', array('name' => 'john'));
+   * </code>
+   *
    * @param   string  $collection Collection Name
    * @param   array   $criteria   The search criteria
    * @param   array   $options    Additional options [Optional]
@@ -527,22 +556,56 @@ class Mango_Database {
   }
 
   /**
+   * Saves a document to this collection
+   *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->save('Guestbook', array('title' => '...', 'body' => '...'));
+   * </code>
+   *
+   * @param   string  $collection Collection Name
+   * @param   array   $criteria   The search criteria
+   * @param   array   $options    Additional options [Optional]
+   * @return  boolean|array
+   *
+   * @link    http://www.php.net/manual/ru/mongocollection.save.php
+   */
+  public function save($collection, array $criteria, $options = array())
+  {
+    return$this->_call('save', array(
+      'collection'  => $collection,
+      'criteria'    => $criteria,
+      'options'     => $options
+    ));
+  }
+
+  /**
    * Drop collection
+   *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->drop_collection('Logs');
+   * </code>
    *
    * @param   string  $collection Collection Name
    * @return  array   The database response as array
    *
    * @link    http://php.net/manual/en/mongocollection.drop.php MongoCollection::drop()
    */
-  public function drop($collection)
+  public function drop_collection($collection)
   {
-    return $this->_call('drop', array(
+    return $this->_call('drop_collection', array(
       'collection'  => $collection
     ));
   }
 
   /**
-   * Bulk insert multiple documents in a collection
+   * Batch insert in a collection
+   *
+   * Example:<br>
+   * <code>
+   *  Mango::instance()->batch_insert('Users', array('name' => 'john', 'passwd' => '...'));
+   * </code>
    *
    * Note: If in the array `$a` pass the objects,
    * they should not have the properties of `protected` or `private`

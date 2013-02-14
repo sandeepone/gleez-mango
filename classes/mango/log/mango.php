@@ -3,9 +3,8 @@
  * Class event logging using the database MongoDB
  *
  * ### System Requirements
- *
  * - PHP 5.3 or higher
- * - Gleez CMS 0.9.8.1 or higher
+ * - Gleez CMS 0.9.8.2 or higher
  * - MondoDB 2.3.3 or higher
  * - PHP-extension MongoDB 1.3 or higher
  *
