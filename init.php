@@ -4,7 +4,7 @@
  *
  * @package    Mango\Routing
  * @author     Sergey Yakovlev - Gleez
- * @copyright  (c) 2013 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 
@@ -51,3 +51,4 @@ if ( class_exists('ACL') && ! ACL::cache() )
   /** Cache the module specific permissions in production */
   ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
+
