@@ -24,7 +24,9 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Current available versions
 
-- **0.1.1.3** for Gleez CMS 0.9.8.2 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **Current master** for Gleez CMS 0.9.8.2 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.1.3** for Gleez CMS 0.9.8.2 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/0.1.1.3.zip)
+- **Nightly builds** for Gleez CMS 0.9.8.2 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/next.zip)
 
 
 ## System Requirements
