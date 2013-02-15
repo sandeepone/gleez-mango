@@ -1,7 +1,7 @@
 # Mango Reader
 
-_Module that monitors all system events and recording them in a log using [MongoDB DBMS] (http://www.mongodb.org)!_
-
+Module that monitors all system events and recording them in a log using [MongoDB DBMS] (http://www.mongodb.org)!
+And also provides the driver for caching with MongoDB support!
 
 ## Overview
 
@@ -33,6 +33,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 - [Gleez CMS] (http://gleezcms.org/) 0.9.8.2 or higher
 - [MondoDB] (http://mongodb.org/) 2.3.3 or higher
 - [PHP-extension] (http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
+- Gleez Cache (optional for caching with MongoDB support)
 - ACL (optional for module specific permissions)
 
 
@@ -42,6 +43,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 - View single log event
 - Delete event from log
 - Drop system log collection
+- Store cache into MongoDB Collection
 
 
 ## Future Plans
@@ -109,7 +111,8 @@ Now that you're here, why not start contributing as well? :)
 
 ## Changelog
 
-**0.1.1.3** - *February 14 2013*
+**0.1.1.3** - *February 15 2013*
+- Added cache driver
 - Added Mango config() setter and getter
 - Fixed constructor (added param `$config` ability)
 - Amended API PHPDoc
