@@ -134,7 +134,7 @@ class Mango_Database implements Mango_Core {
       $config = Kohana::$config->load('mango');
     }
 
-    if (! $config->offsetExists($group))
+    if ( ! $config->offsetExists($group))
     {
       throw new Gleez_Exception('Failed to load :module group: :group',
         array(
@@ -281,7 +281,7 @@ class Mango_Database implements Mango_Core {
 
     if ( ! version_compare(PHP_VERSION, '5.3', '>='))
     {
-      throw new Gleez_Exception(':module requires PHP 5.3 or newer, this version is :php_version.',
+      throw new Gleez_Exception(':module requires PHP 5.3 or higher, this version is :php_version.',
         array(
           ':module' => self::NAME,
           ':php_version' => PHP_VERSION
@@ -291,7 +291,7 @@ class Mango_Database implements Mango_Core {
 
     if ( ! version_compare(Gleez::VERSION, '0.9.8.2', '>='))
     {
-      throw new Gleez_Exception(':module requires Gleez Core 0.9.8.2 or newer, this version is :gleez_version.',
+      throw new Gleez_Exception(':module requires Gleez Core 0.9.8.2 or higher, this version is :gleez_version.',
         array(
           ':module' => self::NAME,
           ':gleez_version' => Gleez::VERSION
@@ -422,7 +422,7 @@ class Mango_Database implements Mango_Core {
   public function connect()
   {
     // If no connection
-    if(! $this->_connected)
+    if( ! $this->_connected)
     {
       try
       {
