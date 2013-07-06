@@ -1,26 +1,26 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
  * Setting the Routes
  *
- * @package    Mango\Routing
+ * @package    Gleez\Mango\Routing
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 
 /** Routing setup */
 if (! Route::cache())
 {
-  Route::set('admin/log', 'admin/logs(/<action>)(/<id>)(/p<page>)', array(
-      'id'      => '([A-Za-z0-9]+)',
-      'page'    => '\d+',
-      'action'  => 'list|view|delete|clear',
-    ))
-    ->defaults(array(
-      'directory'   => 'admin',
-      'controller'  => 'log',
-      'action'      => 'list',
-  ));
+	Route::set('admin/log', 'admin/logs(/<action>)(/<id>)(/p<page>)', array(
+		'id'          => '([A-Za-z0-9]+)',
+		'page'        => '\d+',
+		'action'      => 'list|view|delete|clear',
+	))
+	->defaults(array(
+		'directory'   => 'admin',
+		'controller'  => 'log',
+		'action'      => 'list',
+	));
 }
 
 /**
@@ -32,23 +32,23 @@ if (! Route::cache())
  *
  * @uses ACL Used to define the privileges
  */
-if ( class_exists('ACL') && ! ACL::cache() )
+if ( ! ACL::cache() )
 {
-  ACL::set('Mango Reader', array
-  (
-    'view logs' =>  array (
-      'title'           => __('View logs'),
-      'restrict access' => TRUE,
-      'description'     => __('View all log events'),
-    ),
-    'delete logs' =>  array (
-      'title'           => __('Cleanup logs'),
-      'restrict access' => TRUE,
-      'description'     => __('Deleting events from the log'),
-    ),
-  ));
+	ACL::set('Mango Reader', array
+	(
+		'view logs' =>  array (
+			'title'           => __('View logs'),
+			'restrict access' => TRUE,
+			'description'     => __('View all log events'),
+		),
+		'delete logs' =>  array (
+			'title'           => __('Cleanup logs'),
+			'restrict access' => TRUE,
+			'description'     => __('Deleting events from the log'),
+		),
+	));
 
-  /** Cache the module specific permissions in production */
-  ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
+	/** Cache the module specific permissions in production */
+	ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
 
