@@ -26,42 +26,31 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ### Current stable versions
 
-- **Current master** for Gleez CMS 0.9.8.2 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
-- **0.1.1.3** for Gleez CMS 0.9.8.2 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.1.3.zip)
-- **Nightly builds** for Gleez CMS 0.9.8.2 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/next.zip)
-
-### Old stable versions
-
-- **0.1.1.1** for Gleez CMS 0.9.8.2 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.1.1_gleez.zip)
-
+- **Current master** for Gleez CMS 0.9.26 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.2** for Gleez CMS 0.9.26 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.2.zip)
 
 ## System Requirements
 
 - [PHP](http://php.net/) 5.3 or higher
-- [Gleez CMS](http://gleezcms.org/) 0.9.8.2 or higher
-- [MondoDB](http://mongodb.org/) 2.3.3 or higher
-- [PHP-extension](http://php.net/manual/en/mongo.installation.php) MongoDB 1.3 or higher
-- Gleez Cache (optional for caching with MongoDB support)
-- ACL (optional for module specific permissions)
+- [Gleez CMS](http://gleezcms.org/) 0.9.26 or higher
+- [MondoDB](http://mongodb.org/) 2.4 or higher
+- [PHP-extension](http://php.net/manual/en/mongo.installation.php) MongoDB 1.4 or higher
 
 
 ## Features
 
-- View list of all events
-- View single log event
-- Delete event from log
+- View list of all logs
+- View single log
+- Delete any entry from system log
 - Drop system log collection
-- Store cache into MongoDB Collection
+- Store cache into MongoDB Collection. WIP
 
 
 ## Future Plans
 
-- Divide the `Mango_Database Class` into the following three:
- - `Mango_Database Class`: for database and connection managing
- - `Mango_Collection Class`: for collection managing
- - `Mango_Document Class`: for document managing
-- Implement Profiling
-- Implement Session Storage ( *in the long term* )
+- Implement Cache Storage
+- Implement Session Storage
+- Implement GUI for settings
 - More pure and correct English in the documentation and the string resources
 
 
@@ -75,9 +64,7 @@ It is vital to check the log report on a regular basis as it is often the only w
    * Enable modules. Modules are referenced by a relative or absolute path.
    */
   Kohana::modules(array(
-    'gleez'     => MODPATH.'gleez',      // Gleez Core Module
     'user'      => MODPATH.'user',       // User and group Administration
-    'cache'     => MODPATH.'cache',      // Caching with multiple backends
     'database'  => MODPATH.'database',   // Database access
     'image'     => MODPATH.'image',      // Image manipulation
     'captcha'   => MODPATH.'captcha',    // Captcha implementation
@@ -91,24 +78,21 @@ It is vital to check the log report on a regular basis as it is often the only w
 - Attach the MangoDB write to logging:
 ```php
   // Disable logging into files
-  // Kohana::$log->attach(new Gleez_Log_File(APPPATH.'logs'));
+  // Kohana::$log->attach(new Log_File(APPPATH.'logs'));
 
   // Enable logging into MongoDB database
   Kohana::$log->attach(new Log_Mango());
 ```
 
 - Go to `admin/logs` to view the system log
-
 - Go to `admin/logs/view/<_id>` to view a specific event, where <_id> is event id. For example: `admin/logs/view/511f6e307897313c5c000048`
-
 - For all routes see `MODPATH/<mango_dir>/init.php`
-
-- Use `MODPATH/<mango_dir>/config/mango.php` as an example for creating `APPATH/config/mango.php` with your individual settings
+- Use `MODPATH/<mango_dir>/config/mango-reader.php` as an example for creating `APPATH/config/mango-reader.php` with your individual settings
 
 
 ## Contributors
 
-- [Sergey Yakovlev](https://github.com/sergeyklay) - Code
+- [Sergey Yakovlev](https://github.com/sergeyklay) - Code, localization
 
 Now that you're here, why not start contributing as well? :)
 
@@ -129,6 +113,15 @@ If you are working on new features, or refactoring an existing component, please
 
 
 ## Changelog
+
+**0.1.2** - *Jule 08 2013*
+- Log writer, `Mango` and `Mango_Collection` classes moved to the Gleez
+- Redesigned views
+- Spared from additional css file
+- Simplified and renamed configuration (`config/mango.php -> config/mango-reader.php`)
+- Supported versions MongoDB 2.4 or higher and php-mongo 1.4 or higher
+- i18n support: Russian
+- Tagging version `0.1.2`
 
 **0.1.1.3** - *February 15 2013*
 - Created logo
