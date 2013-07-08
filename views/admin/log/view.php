@@ -1,56 +1,74 @@
-<?php defined("SYSPATH") OR die("No direct script access."); ?>
+<?php defined('SYSPATH') OR die('No direct script access allowed.'); ?>
 
 <div class="help">
-<?php echo __('This shows the complete information on the recorded event from the log.'); ?>
+	<?php _e('Here shows the complete information about current entry from the System log.'); ?>
 </div>
 
-<?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' =>'delete', 'id' => $log['_id'])), '<i class="icon-trash"></i> '.__('Delete'), array('class' => 'btn btn-danger pull-right', 'title' => __('Delete this event from log'))) ?>
+<?php echo HTML::anchor($delete_url, '<i class="icon-trash"></i> '.__('Delete'), array('class' => 'btn btn-danger pull-right', 'title' => __('Delete this entry from log'))) ?>
 <div class="clearfix"></div><br>
 
-<table id="log-admin-view" class="table table-bordered table-striped">
-  <colgroup><col class="oce-first"></colgroup>
-  <thead>
-    <tr>
-      <th><?php echo __('Field')?></th>
-      <th><?php echo __('Value')?></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><?php echo __('Message')?></td>
-      <td><?php echo $log['_id']; ?></td>
-    </tr>
-    <tr>
-      <td><?php echo __('Type')?></td>
-      <td>
-        <span class="label label-<?php echo strtolower($log['type']); ?>">
-          <?php echo $log['type']; ?>
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td><?php echo __('Date')?></td>
-      <td><?php echo Date::date_time($log['time']->sec); ?></td>
-    </tr>
-    <tr>
-      <td><?php echo __('IP')?></td>
-      <td><?php echo $log['host']; ?></td>
-    </tr>
-    <tr>
-      <td><?php echo __('User Agent')?></td>
-      <td><?php echo Text::plain($log['agent']) ?></td>
-    </tr>
-    <tr>
-      <td><?php echo __('User')?></td>
-      <td><?php echo Text::plain($log['user']) ?></td>
-    </tr>
-    <tr>
-      <td><?php echo __('URL')?></td>
-      <td><?php echo Text::plain($log['url']) ?></td>
-    </tr>
-    <tr>
-      <td><?php echo __('Message')?></td>
-      <td><?php echo Text::plain($log['body']) ?></td>
-    </tr>
-  </tbody>
+<table id="log-admin-view" class="table table-striped table-bordered table-highlight">
+	<colgroup><col class="oce-first"></colgroup>
+	<thead>
+	<tr>
+		<th><?php _e('Field')?></th>
+		<th><?php _e('Value')?></th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>#</td>
+		<td><?php echo $log['_id']; ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('Type')?></td>
+		<td>
+			<?php echo HTML::label($log['level'], $log['level']); ?>
+		</td>
+	</tr>
+	<tr>
+		<td><?php _e('Date')?></td>
+		<td>
+			<?php echo Date::formatted_time($log['time']->sec, Config::get('site.date_time_format', 'l, F j, Y - H:i'), Config::get('site.timezone', 'UTC')); ?>
+		</td>
+	</tr>
+	<tr>
+		<td><?php _e('Host')?></td>
+		<td><?php echo $log['hostname']; ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('User Agent')?></td>
+		<td><?php echo ($log['user_agent']) ? $log['user_agent'] : '&mdash;' ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('File')?></td>
+		<td><?php echo Text::plain($log['file']) ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('Line')?></td>
+		<td><?php echo Text::plain($log['line']) ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('Class')?></td>
+		<td><?php echo Text::plain($log['class']) ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('Function')?></td>
+		<td><?php echo Text::plain($log['function']) ?></td>
+	</tr>
+	<tr>
+		<td><?php _e('URL')?></td>
+		<td><?php echo Text::plain($log['url']) ?></td>
+	</tr>
+	<?php if (isset($log['refer'])): ?>
+		<tr>
+			<td><?php _e('Refer')?></td>
+			<td><?php echo Text::plain($log['refer']) ?></td>
+		</tr>
+	<?php endif; ?>
+	<tr>
+		<td><?php _e('Message')?></td>
+		<td><?php echo Text::plain($log['body']) ?></td>
+	</tr>
+	</tbody>
 </table>
