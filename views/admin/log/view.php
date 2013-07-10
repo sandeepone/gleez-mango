@@ -17,7 +17,7 @@
 	</thead>
 	<tbody>
 	<tr>
-		<td>#</td>
+		<td><?php _e('ID'); ?></td>
 		<td><?php echo $log['_id']; ?></td>
 	</tr>
 	<tr>
