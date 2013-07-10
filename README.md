@@ -1,7 +1,11 @@
 # Mango Reader
 
 Module that monitors all system events and recording them in a log using [MongoDB DBMS](http://www.mongodb.org)!
-And also provides the driver for caching with MongoDB support!
+
+This module has appeared thanks to such wonderful projects as:
+
++ [Wouterrr/MangoDB](https://github.com/Wouterrr/MangoDB) - MongoDB for KO 3.x
++ [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm) - A simple but powerful set of wrappers for using MongoDb in PHP (also a Kohana 3 module)
 
 ## Overview
 
@@ -24,17 +28,16 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Download
 
-### Current stable versions
-
-- **Current master** for Gleez CMS 0.9.26 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
-- **0.1.2** for Gleez CMS 0.9.26 or higher [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.2.zip)
+- **Current master** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.3.zip)
+- **0.1.2** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.2.zip)
 
 ## System Requirements
 
 - [PHP](http://php.net/) 5.3 or higher
 - [Gleez CMS](http://gleezcms.org/) 0.9.26 or higher
 - [MondoDB](http://mongodb.org/) 2.4 or higher
-- [PHP-extension](http://php.net/manual/en/mongo.installation.php) MongoDB 1.4 or higher
+- [PHP-extension](http://php.net/manual/en/mongo.installation.php) MongoDB 1.4.0 or higher
 
 
 ## Features
@@ -56,7 +59,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Installation & Usage
 
-- [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip) module from its GitHub [homepage](https://github.com/sergeyklay/gleez-mango)
+- [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip) module from its GitHub homepage
 
 - Include Mango Reader into your module path. For example:
 ```php
@@ -64,14 +67,14 @@ It is vital to check the log report on a regular basis as it is often the only w
    * Enable modules. Modules are referenced by a relative or absolute path.
    */
   Kohana::modules(array(
-    'user'      => MODPATH.'user',       // User and group Administration
-    'database'  => MODPATH.'database',   // Database access
-    'image'     => MODPATH.'image',      // Image manipulation
-    'captcha'   => MODPATH.'captcha',    // Captcha implementation
-    'unittest'  => MODPATH.'unittest',   // Unit testing
-    'codebench' => MODPATH.'codebench',  // Benchmarking tool
-    'userguide' => MODPATH.'userguide',  // User guide and API documentation
-    'mango'     => MODPATH.'mango',      // Mango Reader module
+     'user'      => MODPATH.'user',       // User and group Administration
+     'database'  => MODPATH.'database',   // Database access
+     'image'     => MODPATH.'image',      // Image manipulation
+  // 'captcha'   => MODPATH.'captcha',    // Captcha implementation
+  // 'unittest'  => MODPATH.'unittest',   // Unit testing
+  // 'codebench' => MODPATH.'codebench',  // Benchmarking tool
+  // 'userguide' => MODPATH.'userguide',  // User guide and API documentation
+     'mango'     => MODPATH.'mango',      // Mango Reader module
   ));
 ```
 
@@ -90,18 +93,20 @@ It is vital to check the log report on a regular basis as it is often the only w
 - Use `MODPATH/<mango_dir>/config/mango-reader.php` as an example for creating `APPATH/config/mango-reader.php` with your individual settings
 
 
-## Contributors
+## Contribute to Mango Reader
 
-- [Sergey Yakovlev](https://github.com/sergeyklay) - Code, localization
+### Contributors
+
+- [Sergey Yakovlev](https://github.com/sergeyklay) - Code, Russian i18n
 
 Now that you're here, why not start contributing as well? :)
 
-### Contribute to Mango Reader
+### Contributing info
 
 If you wish to contribute to Mango Reader, please be sure to read/subscribe to the following resources:
 - [Kohana Conventions and Coding Style](http://kohanaframework.org/3.2/guide/kohana/conventions)
-- [Gleez CMS Wiki](https://github.com/gleez/cms/wiki)
-- [Mango Reader Wiki](https://github.com/sergeyklay/gleez-mango/wiki)
+- [Gleez Contributing TODO](https://github.com/gleez/cms/wiki/Contributing)
+- [Mango Reader issues](https://github.com/sergeyklay/gleez-mango/issues)
 
 If you are working on new features, or refactoring an existing component, please create a proposal.
 
@@ -110,22 +115,30 @@ If you are working on new features, or refactoring an existing component, please
 
 - [sign](https://github.com/sergey-sign) - Code
 - [sandeepone](https://github.com/sandeepone) - Gleez Team
-
+- [Wouterrr](https://github.com/Wouterrr) - MangoDB
+- [colinmollenhour](https://github.com/colinmollenhour) - mongodb-php-odm
 
 ## Changelog
+
+**0.1.3** - *Jule 11 2013*
+- Used new Mango_Collection API
+- Fixed README.md
+- i18n fixes
+- Tagging version `0.1.3`
+- Minor changes (see [commits](https://github.com/sergeyklay/gleez-mango/commits/master) diff)
 
 **0.1.2** - *Jule 08 2013*
 - Log writer, `Mango` and `Mango_Collection` classes moved to the Gleez
 - Redesigned views
 - Spared from additional css file
 - Simplified and renamed configuration (`config/mango.php -> config/mango-reader.php`)
-- Supported versions MongoDB 2.4 or higher and php-mongo 1.4 or higher
+- Now supported versions MongoDB 2.4 or higher and php-mongo 1.4 or higher
 - i18n support: Russian
 - Tagging version `0.1.2`
 
 **0.1.1.3** - *February 15 2013*
 - Created logo
-- Maked [home page](http://sergeyklay.github.com/gleez-mango/) for module
+- Makes [home page](http://sergeyklay.github.com/gleez-mango/) for module
 - Added cache driver
 - Added Mango config() setter and getter
 - Fixed constructor (added param `$config` ability)
