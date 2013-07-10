@@ -27,6 +27,7 @@ return array
 	'Delete this entry from log' => 'Удалить запись из журнала',
 	'Drop system log' => 'Очистить системный журнал',
 	// E
+	'Entry from the system log has been removed' => 'Запись из системного журнала успешно удалена',
 	// F
 	'Field' => 'Поле',
 	'File' => 'Файл',
@@ -43,7 +44,6 @@ return array
 	// M
 	'Message' => 'Сообщение',
 	'Message #%id not found!' => 'Сообщение #%id не найдено!',
-	'Message from the log has been removed' => 'Сообщение из системного журнала успешно удалено',
 	// N
 	// O
 	// P
