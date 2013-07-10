@@ -3,14 +3,15 @@
  * Admin Controller Class for control logging
  *
  * ### System Requirements
+ *
  * - PHP 5.3 or higher
  * - Gleez CMS 0.9.26 or higher
  * - MondoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4 or higher
+ * - PHP-extension MongoDB 1.4.0 or higher
  *
  * @package    Mango\Controller\Admin
  * @author     Sergey Yakovlev - Gleez
- * @version    0,1.2
+ * @version    0.1.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -43,8 +44,14 @@ class Controller_Admin_Log extends Controller_Admin {
 	 * Shows list of events
 	 *
 	 * @uses  Config::get
-	 * @uses  Mango::instance
 	 * @uses  Route::get
+	 * @uses  Mango::instance
+	 * @uses  Mango_Collection::count
+	 * @uses  Mango_Collection::reset
+	 * @uses  Mango_Collection::skip
+	 * @uses  Mango_Collection::sortDesc
+	 * @uses  Mango_Collection::limit
+	 * @uses  Mango_Collection::as_array
 	 */
 	public function action_list()
 	{
@@ -65,10 +72,11 @@ class Controller_Admin_Log extends Controller_Admin {
 		);
 
 		$logs = $this->collection
-			->find()
+			->reset()
+			->sortDesc('time')
 			->skip($pagination->offset)
-			->sort(array('time'=> -1))
-			->limit($pagination->items_per_page);
+			->limit($pagination->items_per_page)
+			->as_array();
 
 		$this->response->body($view);
 	}
@@ -92,7 +100,7 @@ class Controller_Admin_Log extends Controller_Admin {
 
 		if(is_null($log))
 		{
-			Message::alert(__('Message #%id not found!', array(':id' => $id)));
+			Message::alert(__('Message #%id not found!', array('%id' => $id)));
 
 			Kohana::$log->add(Log::WARNING, 'An attempt to get the log event id: `:id`, which is not found!',
 				array(':id' => $id)
@@ -169,8 +177,9 @@ class Controller_Admin_Log extends Controller_Admin {
 					array("justOne" => TRUE)          // Remove at most one record
 				);
 
-				Message::success(__('Message from the log has been removed'));
+				Message::success(__('Entry from the system log has been removed'));
 
+				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
 				if ( ! $this->_internal)
 				{
 					$this->request->redirect(Route::get('admin/log')->uri(), 200);
@@ -232,6 +241,8 @@ class Controller_Admin_Log extends Controller_Admin {
 				Message::success(__('System log successfully cleared. Database message: %msg',
 					array('%msg' => $response['msg'])
 				));
+
+				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
 
 				if ( ! $this->_internal)
 				{
