@@ -29,8 +29,8 @@ It is vital to check the log report on a regular basis as it is often the only w
 ## Download
 
 - **Current master** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
-- **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.3.zip)
-- **0.1.2** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/0.1.2.zip)
+- **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.3.zip)
+- **0.1.2** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.2.zip)
 
 ## System Requirements
 
