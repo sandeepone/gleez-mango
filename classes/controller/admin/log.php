@@ -199,9 +199,9 @@ class Controller_Admin_Log extends Controller_Admin {
 		{
 			try
 			{
-				$this->collection->remove(
-					array('_id' => new MongoId($id)), // Event ID
-					array("justOne" => TRUE)          // Remove at most one record
+				$this->collection->safeRemove(
+					array('_id'     => new MongoId($id)), // Event ID
+					array('justOne' => TRUE)              // Remove at most one record
 				);
 
 				Message::success(__('Entry from the system log has been removed'));
