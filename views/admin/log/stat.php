@@ -26,17 +26,17 @@
 		</tr>
 		<tr>
 			<td><var>size</var></td>
-			<td><?php echo $stats['size']; ?></td>
+			<td><?php _e(':size KB', array(':size' => $stats['size'])); ?></td>
 			<td><?php _e('The size of the data stored in this collection. This value does not include the size of any indexes associated with the collection'); ?></td>
 		</tr>
 		<tr>
 			<td><var>avgObjSize</var></td>
-			<td><?php echo $stats['avgObjSize']; ?></td>
+			<td><?php _e(':size KB', array(':size' => $stats['avgObjSize'])); ?></td>
 			<td><?php _e('The average size of an object in the collection.'); ?></td>
 		</tr>
 		<tr>
 			<td><var>storageSize</var></td>
-			<td><?php echo $stats['storageSize']; ?></td>
+			<td><?php _e(':size KB', array(':size' => $stats['storageSize'])); ?></td>
 			<td><?php _e('The total amount of storage allocated to this collection for document storage.'); ?></td>
 		</tr>
 		<tr>
@@ -51,7 +51,7 @@
 		</tr>
 		<tr>
 			<td><var>lastExtentSize</var></td>
-			<td><?php echo $stats['lastExtentSize']; ?></td>
+			<td><?php _e(':size KB', array(':size' => $stats['lastExtentSize'])); ?></td>
 			<td><?php _e('The size of the last extent allocated.'); ?></td>
 		</tr>
 		<tr>
@@ -71,17 +71,29 @@
 		</tr>
 		<tr>
 			<td><var>totalIndexSize</var></td>
-			<td><?php echo $stats['totalIndexSize']; ?></td>
+			<td><?php _e(':size KB', array(':size' => $stats['totalIndexSize'])); ?></td>
 			<td><?php _e('The total size of all indexes.'); ?></td>
 		</tr>
 		<tr>
 			<td><var>indexSizes</var></td>
 			<td>
-				<?php foreach($stats['indexSizes'] as $index => $count): ?>
-					<strong><?php echo $index; ?></strong>: <?php echo $count; ?><br>
+				<?php foreach($stats['indexSizes'] as $index => $size): ?>
+					<strong><?php echo $index; ?></strong>: <?php _e(':size KB', array(':size' => $size)); ?><br>
 				<?php endforeach; ?>
 			</td>
 			<td><?php _e('This field specifies the key and size of every existing index on the collection.'); ?></td>
 		</tr>
+		<?php if (isset($stats['capped'])): ?>
+			<tr>
+				<td><var>capped</var></td>
+				<td><?php echo $stats['capped']; ?></td>
+				<td><?php _e('Capped collection. If the collection should be a fixed size.') ?></td>
+			</tr>
+			<tr>
+				<td><var>max</var></td>
+				<td><?php echo $stats['max']; ?></td>
+				<td><?php _e('If the collection is fixed size, the maximum number of elements to store in the collection.') ?></td>
+			</tr>
+		<?php endif; ?>
 	</tbody>
 </table>
