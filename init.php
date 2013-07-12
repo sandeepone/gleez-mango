@@ -14,7 +14,7 @@ if (! Route::cache())
 	Route::set('admin/log', 'admin/logs(/<action>)(/<id>)(/p<page>)', array(
 		'id'          => '([A-Za-z0-9]+)',
 		'page'        => '\d+',
-		'action'      => 'list|view|delete|clear',
+		'action'      => 'stat|list|view|delete|clear',
 	))
 	->defaults(array(
 		'directory'   => 'admin',
