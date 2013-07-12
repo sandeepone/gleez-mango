@@ -11,7 +11,7 @@
  *
  * @package    Mango\Controller\Admin
  * @author     Sergey Yakovlev - Gleez
- * @version    0.1.3
+ * @version    0.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -41,6 +41,33 @@ class Controller_Admin_Log extends Controller_Admin {
 	}
 
 	/**
+	 * The after() method is called after controller action
+	 *
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 */
+	public function after()
+	{
+		// Tabs
+		$this->_tabs =  array(
+			array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics')),
+			array('link' => Route::get('admin/log')->uri(array('action' =>'list')), 'text' => __('List')),
+		);
+
+		parent::after();
+	}
+
+	public function action_stat()
+	{
+		$this->title = __('System Log Statistics');
+
+		$view = View::factory('admin/log/stat')
+			->set('stats', $this->collection->getStats());
+
+		$this->response->body($view);
+	}
+
+	/**
 	 * Shows list of events
 	 *
 	 * @uses  Config::get
@@ -55,7 +82,7 @@ class Controller_Admin_Log extends Controller_Admin {
 	 */
 	public function action_list()
 	{
-		$this->title = __('System log');
+		$this->title = __('System Log');
 
 		$view = View::factory('admin/log/list')
 			->set('clear_url',    Route::get('admin/log')->uri(array('action' =>'clear')))
@@ -76,7 +103,7 @@ class Controller_Admin_Log extends Controller_Admin {
 			->sortDesc('time')
 			->skip($pagination->offset)
 			->limit($pagination->items_per_page)
-			->as_array();
+			->toArray();
 
 		$this->response->body($view);
 	}
