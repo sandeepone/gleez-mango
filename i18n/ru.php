@@ -31,6 +31,7 @@ return array
 	// F
 	'Field' => 'Поле',
 	'File' => 'Файл',
+	'For DB admins only. This shows variety of storage statistics for a given collection.' => 'Только для администраторов баз данных. Здесь отображается разнообразная статистика хранения данных для текущей коллекции.',
 	'Function' => 'Функция',
 	// G
 	// H
@@ -51,7 +52,8 @@ return array
 	// R
 	'Refer' => 'Перенаправлено с',
 	// S
-	'System log' => 'Системный журнал',
+	'System Log' => 'Системный журнал',
+	'System Log Statistics' => 'Статистика системного журнала',
 	'System log successfully cleared. Database message: %msg' => 'Системный журнал успешно очищен. Ответ базы данных: %msg',
 	// T
 	'The log component monitors your website, capturing system events in a log to be reviewed by an authorized individual at a later time. The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information. It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.' => 'Компонент журналирования занимается мониторингом вашего сайта, захватывая все системные события в журнал и предоставляя возможность просмотра событий уполномоченным лицом в более позднее время. Системный журнал является списком записанных событий, содержащих данные об использовании вашего сайта, данные о производительности, ошибки, предупреждения и прочую оперативную информацию. Крайне важно проверять его на регулярной основе, так как часто это единственный способ узнать, что происходит.',
