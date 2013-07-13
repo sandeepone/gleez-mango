@@ -15,8 +15,8 @@ return array
 	// %
 	// A
 	'All logs' => 'Все сообщения',
-	'An error occurred when clearing the system log: %msg' => 'Произошла ошибка при очистке системного журнала: %msg',
 	'An error occurred when deleting the message: %msg' => 'Произошла ошибка при удалении сообщения: %msg',
+	'An error occurred when dropping the system log: %msg' => 'Произошла ошибка при очистке системного журнала: %msg',
 	// B
 	// C
 	'Class' => 'Класс',
