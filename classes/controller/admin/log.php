@@ -29,6 +29,8 @@ class Controller_Admin_Log extends Controller_Admin {
 	 *
 	 * @uses  ACL::required
 	 * @uses  Config::get
+	 * @uses  Mango::instance
+	 * @uses  Mango::__get
 	 */
 	public function before()
 	{
@@ -57,6 +59,11 @@ class Controller_Admin_Log extends Controller_Admin {
 		parent::after();
 	}
 
+	/**
+	 * Show Log statistics
+	 *
+	 * @uses  Mango_Collection::getStats
+	 */
 	public function action_stat()
 	{
 		$this->title = __('System Log Statistics');
@@ -111,7 +118,7 @@ class Controller_Admin_Log extends Controller_Admin {
 	/**
 	 * View a particular event
 	 *
-	 * @uses  Mango::instance
+	 * @uses  Mango_Collection::findOne
 	 * @uses  Message::alert
 	 * @uses  Log::add
 	 * @uses  Route::get
@@ -150,7 +157,8 @@ class Controller_Admin_Log extends Controller_Admin {
 	 * Delete the message from log
 	 *
 	 * @uses  ACL::required
-	 * @uses  Mango::instance
+	 * @uses  Mango_Collection::findOne
+	 * @uses  Mango_Collection::safeRemove
 	 * @uses  Message::success
 	 * @uses  Message::alert
 	 * @uses  Message::error
@@ -169,7 +177,7 @@ class Controller_Admin_Log extends Controller_Admin {
 
 		$log = $this->collection->findOne(array('_id' => new MongoId($id)));
 
-		if(is_null($log))
+		if (is_null($log))
 		{
 			Message::alert(__('Message #%id not found!', array(':id' => $id)));
 
@@ -240,6 +248,7 @@ class Controller_Admin_Log extends Controller_Admin {
 	 * @uses  Request::redirect
 	 * @uses  Message::success
 	 * @uses  Message::error
+	 * @uses  Mango_Collection::safeDrop
 	 */
 	public function action_clear()
 	{
@@ -263,7 +272,7 @@ class Controller_Admin_Log extends Controller_Admin {
 		{
 			try
 			{
-				$response = $this->collection->drop();
+				$response = $this->collection->safeDrop();
 
 				Message::success(__('System log successfully cleared. Database message: %msg',
 					array('%msg' => $response['msg'])
@@ -279,8 +288,8 @@ class Controller_Admin_Log extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Message::error(__('An error occurred when clearing the system log: %msg',
-					array(':msg' => $e->getMessage())
+				Message::error(__('An error occurred when dropping the system log: %msg',
+					array('%msg' => $e->getMessage())
 				));
 
 				if ( ! $this->_internal)
