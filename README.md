@@ -1,6 +1,6 @@
 ## Mango Reader
 
-Module for [Gleez CMS](http://gleezcms.org/) that monitors all system events and recording them in a log using [MongoDB DBMS](http://www.mongodb.org)!
+Module for [Gleez CMS](http://gleezcms.org/) that provide access to read all system logs with using [MongoDB DBMS](http://www.mongodb.org)!
 
 ## Overview
 
@@ -8,16 +8,16 @@ Module for [Gleez CMS](http://gleezcms.org/) that monitors all system events and
 
 ## Description
 
-**Mango Reader** is a [Gleez CMS](http://gleezcms.org/) module and it's a simple object wrapper for the [Mongo PHP](http://php.net/manual/en/book.mongo.php) driver. It monitors your website, capturing system events in a log to be reviewed by an authorized individual at a later time. The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information.
+**Mango Reader** is a [Gleez CMS](http://gleezcms.org/) module that provide access to read all system logs with using [MongoDB DBMS](http://www.mongodb.org). The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information.
 
 It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.
 
 
 ## Download
 
-- **Current master** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **Current master** for Gleez CMS 0.9.27 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.4** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.4.zip)
 - **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.3.zip)
-- **0.1.2** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.2.zip)
 
 ## System Requirements
 
@@ -38,11 +38,10 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Future Plans
 
-- Implement Cache Storage
-- Implement Session Storage
+- Implement Cache Viewer
+- Implement Session Viewer
 - Implement GUI for settings
 - More pure and correct English in the documentation and the string resources
-
 
 ##  Special thanks to
 
@@ -57,4 +56,4 @@ This module has appeared thanks to such wonderful projects as:
 
 ***
 
-[Installation](https://github.com/sergeyklay/gleez-mango/wiki/Installation) | [Changelog](https://github.com/sergeyklay/gleez-mango/wiki/Changelog) | [Contributors](https://github.com/sergeyklay/gleez-mango/wiki/Contributors) | [Contributing](https://github.com/sergeyklay/gleez-mango/wiki/Contributing) | [License](https://github.com/gleez/cms/wiki/License)
+[Installation](https://github.com/sergeyklay/gleez-mango/wiki/Installation) | [Changelog](https://github.com/sergeyklay/gleez-mango/wiki/Changelog) | [Contributing](https://github.com/sergeyklay/gleez-mango/wiki/Contributing) | [License](https://github.com/gleez/cms/wiki/License)
