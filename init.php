@@ -30,21 +30,22 @@ if (! Route::cache())
  * Note: Parameter `restrict access` indicates that these privileges have serious
  * implications for safety.
  *
- * @uses ACL Used to define the privileges
+ * @uses  ACL::cache
+ * @uses  ACL::set
  */
 if ( ! ACL::cache() )
 {
 	ACL::set('Mango Reader', array
 	(
 		'view logs' =>  array (
-			'title'           => __('View logs'),
+			'title'           => __('View Logs'),
 			'restrict access' => TRUE,
-			'description'     => __('View all log events'),
+			'description'     => __('View all logs'),
 		),
 		'delete logs' =>  array (
-			'title'           => __('Cleanup logs'),
+			'title'           => __('Deleting Logs'),
 			'restrict access' => TRUE,
-			'description'     => __('Deleting events from the log'),
+			'description'     => __('Deleting logs from the System Log'),
 		),
 	));
 
