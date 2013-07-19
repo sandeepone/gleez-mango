@@ -4,7 +4,7 @@
 	<?php _e('Here shows the complete information about current entry from the System log.'); ?>
 </div>
 
-<?php echo HTML::anchor($delete_url, '<i class="icon-trash"></i> '.__('Delete'), array('class' => 'btn btn-danger pull-right', 'title' => __('Delete this entry from log'))) ?>
+<?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' =>'delete', 'id' => $log['_id'])), '<i class="icon-trash"></i> '.__('Delete'), array('class' => 'btn btn-danger pull-right', 'title' => __('Delete this entry from log'))) ?>
 <div class="clearfix"></div><br>
 
 <table id="log-admin-view" class="table table-striped table-bordered table-highlight">
