@@ -1,10 +1,12 @@
-## Mango Reader
+# Mango Reader
 
-Module for [Gleez CMS](http://gleezcms.org/) that provide access to read all system logs with using [MongoDB DBMS](http://www.mongodb.org)!
+The [Gleez](http://gleezcms.org/) Log component monitors your website, capturing system events in a log to be reviewed by an authorized individual at a later time. __Mango Reader__ provide access to read all System Logs with using [MongoDB DBMS](http://www.mongodb.org) *if you use ability to record logs to the database*.
+
 
 ## Overview
 
 **MongoDB** (from "hu|mongo|us") is an open source document-oriented database system developed and supported by [10gen](http://www.10gen.com/). It is part of the NoSQL family of database systems. Instead of storing data in tables as is done in a "classical" relational database, MongoDB stores structured data as JSON-like documents with dynamic schemas (MongoDB calls the format BSON), making the integration of data in certain types of applications easier and faster.
+
 
 ## Description
 
@@ -18,14 +20,6 @@ It is vital to check the log report on a regular basis as it is often the only w
 - **Current master** for Gleez CMS 0.9.27 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
 - **0.1.4** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.4.zip)
 - **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.3.zip)
-
-## System Requirements
-
-- [PHP](http://php.net/) 5.3 or higher
-- [Gleez CMS](http://gleezcms.org/) 0.9.26 or higher
-- [MondoDB](http://mongodb.org/) 2.4 or higher
-- [PHP-extension](http://php.net/manual/en/mongo.installation.php) MongoDB 1.4.0 or higher
-
 
 ## Features
 
@@ -43,6 +37,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 - Implement GUI for settings
 - More pure and correct English in the documentation and the string resources
 
+
 ##  Special thanks to
 
 - [sign](https://github.com/sergey-sign) - Code
@@ -56,4 +51,4 @@ This module has appeared thanks to such wonderful projects as:
 
 ***
 
-[Installation](https://github.com/sergeyklay/gleez-mango/wiki/Installation) | [Changelog](https://github.com/sergeyklay/gleez-mango/wiki/Changelog) | [Contributing](https://github.com/sergeyklay/gleez-mango/wiki/Contributing) | [License](https://github.com/gleez/cms/wiki/License)
+[Installation](https://github.com/sergeyklay/gleez-mango/wiki/Installation) | [Changelog](https://github.com/sergeyklay/gleez-mango/wiki/Changelog) | [Contributing](https://github.com/sergeyklay/gleez-mango/wiki/Contributing) | [License Agreement](https://github.com/sergeyklay/gleez-mango/wiki/License-Agreement)
