@@ -20,8 +20,10 @@ return array
 	// B
 	// C
 	'Class' => 'Класс',
+	'Delete Log' => 'Удалить лог',
+	'Deleting Logs' => 'Очистка логов',
+	'Deleting logs from the System Log' => 'Очистка логов из системного журнала',
 	'Clear all' => 'Очистить всё',
-	'Clear all messages from the log' => 'Очистить все сообщения из журнала',
 	// D
 	'Delete :id' => 'Удалить :id',
 	'Delete this entry from log' => 'Удалить запись из журнала',
@@ -56,12 +58,14 @@ return array
 	'System Log Statistics' => 'Статистика системного журнала',
 	'System log successfully cleared. Database message: %msg' => 'Системный журнал успешно очищен. Ответ базы данных: %msg',
 	// T
-	'The log component monitors your website, capturing system events in a log to be reviewed by an authorized individual at a later time. The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information. It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.' => 'Компонент журналирования занимается мониторингом вашего сайта, захватывая все системные события в журнал и предоставляя возможность просмотра событий уполномоченным лицом в более позднее время. Системный журнал является списком записанных событий, содержащих данные об использовании вашего сайта, данные о производительности, ошибки, предупреждения и прочую оперативную информацию. Крайне важно проверять его на регулярной основе, так как часто это единственный способ узнать, что происходит.',
+	'The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information. It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.' => 'Системный журнал является списком записанных событий, содержащих данные об использовании вашего сайта, данные о производительности, ошибки, предупреждения и прочую оперативную информацию. Крайне важно проверять его на регулярной основе, так как часто это единственный способ узнать, что происходит.',
 	// U
 	'User Agent' => 'Клиентское приложение',
 	// V
 	'Value' => 'Значение',
-	'View log' => 'Просмотр сообщения',
+	'View all logs' => 'Просмотр любых логов',
+	'View Log' => 'Просмотр лога',
+	'View Logs' => 'Просмотр логов',
 	// W
 	// X
 	// Y
