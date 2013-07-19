@@ -127,27 +127,23 @@ class Controller_Admin_Log extends Controller_Admin {
 	 */
 	public function action_view()
 	{
-		$this->title  = __('View log');
+		$this->title  = __('View Log');
 		$id = $this->request->param('id', 0);
 
 		$log = $this->collection->findOne(array('_id' => new MongoId($id)));
 
 		if(is_null($log))
 		{
-			Message::alert(__('Message #%id not found!', array('%id' => $id)));
-
 			Kohana::$log->add(Log::WARNING, 'An attempt to get the log event id: `:id`, which is not found!',
 				array(':id' => $id)
 			);
+			Message::alert(__('Message #%id not found!', array('%id' => $id)));
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/log')->uri(), 404);
-			}
+			// Redirect to listing
+			$this->request->redirect(Route::get('admin/log')->uri(), 404);
 		}
 
 		$view = View::factory('admin/log/view')
-			->set('delete_url', Route::get('admin/log')->uri(array('action' =>'delete', 'id' => $id)))
 			->set('log',        $log);
 
 		$this->response->body($view);
@@ -171,24 +167,21 @@ class Controller_Admin_Log extends Controller_Admin {
 	 */
 	public function action_delete()
 	{
-		$id = $this->request->param('id', 0);
 		// Required privilege
 		ACL::required('delete logs');
 
+		$id  = $this->request->param('id', 0);
 		$log = $this->collection->findOne(array('_id' => new MongoId($id)));
 
 		if (is_null($log))
 		{
-			Message::alert(__('Message #%id not found!', array(':id' => $id)));
-
 			Kohana::$log->add(Log::WARNING, 'An attempt to delete the log event id: `:id`, which is not found!',
 				array(':id' => $id)
 			);
+			Message::alert(__('Message #%id not found!', array(':id' => $id)));
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/log')->uri(), 404);
-			}
+			// Redirect to listing
+			$this->request->redirect(Route::get('admin/log')->uri(), 404);
 		}
 
 		$this->title = __('Delete :id', array(':id' => $id));
@@ -199,6 +192,7 @@ class Controller_Admin_Log extends Controller_Admin {
 		// If deletion is not desired, redirect to list
 		if (isset($_POST['no']) AND $this->valid_post())
 		{
+			// Redirect to listing
 			$this->request->redirect(Route::get('admin/log')->uri(), 200);
 		}
 
@@ -212,14 +206,11 @@ class Controller_Admin_Log extends Controller_Admin {
 					array('justOne' => TRUE)              // Remove at most one record
 				);
 
-				Message::success(__('Entry from the system log has been removed'));
-
 				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/log')->uri(), 200);
-				}
+				Message::set(Message::SUCCESS,__('Entry from the system log has been removed'));
 
+				// Redirect to listing
+				$this->request->redirect(Route::get('admin/log')->uri(), 200);
 			}
 			catch (Exception $e)
 			{
@@ -227,10 +218,8 @@ class Controller_Admin_Log extends Controller_Admin {
 					array(':msg' => $e->getMessage())
 				));
 
-				if (! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/log')->uri(), 500);
-				}
+				// Redirect to listing
+				$this->request->redirect(Route::get('admin/log')->uri(), 500);
 			}
 		}
 
@@ -274,32 +263,27 @@ class Controller_Admin_Log extends Controller_Admin {
 			{
 				$response = $this->collection->safeDrop();
 
+				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
 				Message::success(__('System log successfully cleared. Database message: %msg',
 					array('%msg' => $response['msg'])
 				));
 
-				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
-
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/log')->uri(), 200);
-				}
-
+				// Redirect to listing
+				$this->request->redirect(Route::get('admin/log')->uri(), 200);
 			}
 			catch (Exception $e)
 			{
+				Kohana::$log->add(Log::ERROR, 'An error occurred when dropping the system log: :msg',
+					array(':msg' => $e->getMessage())
+				);
 				Message::error(__('An error occurred when dropping the system log: %msg',
 					array('%msg' => $e->getMessage())
 				));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/log')->uri(), 500);
-				}
+				// Redirect to listing
+				$this->request->redirect(Route::get('admin/log')->uri(), 500);
 			}
 		}
-
 		$this->response->body($view);
 	}
-
 }
