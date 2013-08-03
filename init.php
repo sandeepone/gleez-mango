@@ -50,6 +50,6 @@ if ( ! ACL::cache() )
 	));
 
 	/** Cache the module specific permissions in production */
-	ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
+	ACL::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
