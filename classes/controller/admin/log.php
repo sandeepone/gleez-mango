@@ -10,8 +10,8 @@
  * - PHP-extension MongoDB 1.4.0 or higher
  *
  * @package    Mango\Controller\Admin
- * @author     Sergey Yakovlev - Gleez
- * @version    0.2.0
+ * @author     Gleez Team
+ * @version    0.2.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -212,7 +212,7 @@ class Controller_Admin_Log extends Controller_Admin {
 				// Redirect to listing
 				$this->request->redirect(Route::get('admin/log')->uri(), 200);
 			}
-			catch (Exception $e)
+			catch (MongoException $e)
 			{
 				Message::error(__('An error occurred when deleting the message: %msg',
 					array(':msg' => $e->getMessage())
@@ -261,7 +261,7 @@ class Controller_Admin_Log extends Controller_Admin {
 		{
 			try
 			{
-				$response = $this->collection->safeDrop();
+				$response = $this->collection->safeRemove();
 
 				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
 				Message::success(__('System log successfully cleared. Database message: %msg',
@@ -271,7 +271,7 @@ class Controller_Admin_Log extends Controller_Admin {
 				// Redirect to listing
 				$this->request->redirect(Route::get('admin/log')->uri(), 200);
 			}
-			catch (Exception $e)
+			catch (MongoException $e)
 			{
 				Kohana::$log->add(Log::ERROR, 'An error occurred when dropping the system log: :msg',
 					array(':msg' => $e->getMessage())
