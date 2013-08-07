@@ -2,7 +2,7 @@
 
 return array(
 	'collections' => array(
-		'logs' => 'Logs'
+		'logs' => 'logs'
 	),
 
 	'items_per_page' => 30,
