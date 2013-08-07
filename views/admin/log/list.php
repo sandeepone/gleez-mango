@@ -21,7 +21,7 @@
 	<tbody>
 	<?php foreach ($logs as $log) : ?>
 		<tr>
-			<td><?php echo Date::date_time($log['time']->sec); ?></td>
+			<td><?php echo Date::date_time($log['_id']->getTimestamp()); ?></td>
 			<td><?php echo HTML::label($log['level'], $log['level']); ?></td>
 			<td><?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' => 'view', 'id' => $log['_id'])), Text::plain(Text::limit_chars($log['body'], 50)), array('title'=> __('View Log'))); ?></td>
 			<td><?php echo $log['hostname']; ?></td>
