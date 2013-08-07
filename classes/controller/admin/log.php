@@ -20,9 +20,15 @@ class Controller_Admin_Log extends Controller_Admin {
 
 	/**
 	 * Current logs collection
-	 * @var Mango_Collection
+	 * @var \Mango_Collection
 	 */
 	private $collection;
+
+	/**
+	 * Collection name
+	 * @var string
+	 */
+	private $collection_name;
 
 	/**
 	 * The before() method is called before controller action
@@ -36,8 +42,8 @@ class Controller_Admin_Log extends Controller_Admin {
 	{
 		ACL::required('view logs');
 
-		$this->collection = Config::get('mango-reader.collections.logs', 'Logs');
-		$this->collection = Mango::instance()->{$this->collection};
+		$this->collection_name = Config::get('mango-reader.collections.logs', 'logs');
+		$this->collection = Mango::instance()->{$this->collection_name};
 
 		parent::before();
 	}
@@ -50,10 +56,12 @@ class Controller_Admin_Log extends Controller_Admin {
 	 */
 	public function after()
 	{
+		$exists = Mango::instance()->exists($this->collection_name);
+
 		// Tabs
 		$this->_tabs =  array(
-			array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics')),
 			array('link' => Route::get('admin/log')->uri(array('action' =>'list')), 'text' => __('List')),
+			$exists ? array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics')) : NULL
 		);
 
 		parent::after();
