@@ -29,7 +29,7 @@
 		<tr>
 			<td><?php _e('Date')?></td>
 			<td>
-				<?php echo Date::formatted_time($log['time']->sec, Config::get('site.date_time_format', 'l, F j, Y - H:i'), Config::get('site.timezone', 'UTC')); ?>
+				<?php echo Date::formatted_time($log['_id']->getTimestamp(), Config::get('site.date_time_format', 'l, F j, Y - H:i'), Config::get('site.timezone', 'UTC')); ?>
 			</td>
 		</tr>
 		<tr>
@@ -38,15 +38,15 @@
 		</tr>
 		<tr>
 			<td><?php _e('User Agent')?></td>
-			<td><?php echo ($log['user_agent']) ? $log['user_agent'] : '&mdash;' ?></td>
+			<td><?php echo isset($log['user_agent']) ? $log['user_agent'] : '&mdash;' ?></td>
 		</tr>
 		<tr>
 			<td><?php _e('File')?></td>
-			<td><?php echo Text::plain($log['file']) ?></td>
+			<td><?php echo isset($log['file']) ? Text::plain($log['file']) : '&mdash;' ?></td>
 		</tr>
 		<tr>
 			<td><?php _e('Line')?></td>
-			<td><?php echo Text::plain($log['line']) ?></td>
+			<td><?php echo isset($log['line']) ? Text::plain($log['line']) : '&mdash;' ?></td>
 		</tr>
 		<tr>
 			<td><?php _e('Class')?></td>
@@ -60,12 +60,10 @@
 			<td><?php _e('URL')?></td>
 			<td><?php echo Text::plain($log['url']) ?></td>
 		</tr>
-		<?php if (isset($log['refer'])): ?>
-			<tr>
-				<td><?php _e('Refer')?></td>
-				<td><?php echo Text::plain($log['refer']) ?></td>
-			</tr>
-		<?php endif; ?>
+		<tr>
+			<td><?php _e('Refer')?></td>
+			<td><?php echo isset($log['refer']) ? Text::plain($log['refer']) : '&mdash;' ?></td>
+		</tr>
 		<tr>
 			<td><?php _e('Message')?></td>
 			<td><?php echo Text::plain($log['body']) ?></td>
