@@ -25,14 +25,8 @@ Kohana::modules(array(
 ));
 ~~~
 
-4. Attach the MangoDB write to logging
-~~~
-// Disable logging into files
-// Kohana::$log->attach(new Log_File(APPPATH.'logs'));
-
-// Enable logging into MongoDB database
-Kohana::$log->attach(new Log_Mango());
-~~~
+[!!] Note: You must have enabled [Mango Log](http://gleezcms.org/guide/api/Log_Mango) writer.
+     For additional info please see [Gleez Log Component](http://gleezcms.org/guide/gleez/logging) guide
 
 ## Git Clone Installation
 
