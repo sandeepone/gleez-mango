@@ -1,7 +1,7 @@
 # Requirements
 
 - [PHP](http://php.net/) 5.3.7 or higher
-- [Gleez CMS](http://gleezcms.org/) 0.9.26 or higher
+- [Gleez CMS](http://gleezcms.org/) 0.10.4 or higher
 - [MondoDB](http://mongodb.org/) 2.4.5 or higher
 - [PHP-extension](http://php.net/manual/en/mongo.installation.php) MongoDB 1.4.0 or higher
 
