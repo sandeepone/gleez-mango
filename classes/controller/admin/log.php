@@ -4,8 +4,7 @@
  *
  * ### System Requirements
  *
- * - PHP 5.3 or higher
- * - Gleez CMS 0.9.26 or higher
+ * - Gleez CMS 0.10.4 or higher
  * - MondoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
@@ -142,7 +141,7 @@ class Controller_Admin_Log extends Controller_Admin {
 
 		if(is_null($log))
 		{
-			Kohana::$log->add(Log::WARNING, 'An attempt to get the log event id: `:id`, which is not found!',
+			Log::warning('An attempt to get the log event id: `:id`, which is not found!',
 				array(':id' => $id)
 			);
 			Message::alert(__('Message #%id not found!', array('%id' => $id)));
@@ -183,7 +182,7 @@ class Controller_Admin_Log extends Controller_Admin {
 
 		if (is_null($log))
 		{
-			Kohana::$log->add(Log::WARNING, 'An attempt to delete the log event id: `:id`, which is not found!',
+			Log::warning('An attempt to delete the log event id: `:id`, which is not found!',
 				array(':id' => $id)
 			);
 			Message::alert(__('Message #%id not found!', array(':id' => $id)));
@@ -214,7 +213,7 @@ class Controller_Admin_Log extends Controller_Admin {
 					array('justOne' => TRUE)              // Remove at most one record
 				);
 
-				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
+				Log::info('System log successfully cleared.');
 				Message::set(Message::SUCCESS,__('Entry from the system log has been removed'));
 
 				// Redirect to listing
@@ -271,7 +270,7 @@ class Controller_Admin_Log extends Controller_Admin {
 			{
 				$response = $this->collection->safeRemove();
 
-				Kohana::$log->add(Log::INFO, 'System log successfully cleared');
+				Log::info('System log successfully cleared.');
 				Message::success(__('System log successfully cleared. Database message: %msg',
 					array('%msg' => $response['msg'])
 				));
@@ -281,7 +280,7 @@ class Controller_Admin_Log extends Controller_Admin {
 			}
 			catch (MongoException $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'An error occurred when dropping the system log: :msg',
+				Log::error('An error occurred when dropping the system log: :msg',
 					array(':msg' => $e->getMessage())
 				);
 				Message::error(__('An error occurred when dropping the system log: %msg',
