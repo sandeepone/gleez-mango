@@ -1,4 +1,4 @@
-Mango Reader License Agreement
+Gleez CMS License Agreement
 
 This license is a legal agreement between you and the Gleez Team for the use of Mango Reader (the "Software"). By obtaining the Software you agree to comply with the terms and conditions of this license.
 
