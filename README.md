@@ -17,7 +17,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Download
 
-- **Current master** for Gleez CMS 0.9.27 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **Current master** for Gleez CMS v0.10.4 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
 - **0.1.4** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.4.zip)
 - **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.3.zip)
 
@@ -27,7 +27,6 @@ It is vital to check the log report on a regular basis as it is often the only w
 - View single log
 - Delete any entry from system log
 - Drop system log collection
-- Store cache into MongoDB Collection. WIP
 
 
 ## Future Plans
@@ -35,7 +34,6 @@ It is vital to check the log report on a regular basis as it is often the only w
 - Implement Cache Viewer
 - Implement Session Viewer
 - Implement GUI for settings
-- More pure and correct English in the documentation and the string resources
 
 
 ##  Special thanks to
