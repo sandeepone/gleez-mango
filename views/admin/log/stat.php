@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.'); ?>
-
 <div class="help">
 	<?php _e('For DB admins only. This shows variety of storage statistics for a given collection.'); ?>
 </div>

@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.'); ?>
-
 <div class="help">
 	<?php _e('Here shows the complete information about current entry from the System log.'); ?>
 </div>
