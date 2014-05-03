@@ -15,11 +15,24 @@ The [Gleez](http://gleezcms.org/) Log component monitors your website, capturing
 It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.
 
 
-## Download
+## Installation
 
-- **Current master** for Gleez CMS v0.10.4 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/master.zip)
-- **0.1.4** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.4.zip)
-- **0.1.3** for Gleez CMS 0.9.26 or higher: [Download](https://github.com/sergeyklay/gleez-mango/archive/v0.1.3.zip)
+__Git way__
+
+```bash
+$ git clone https://github.com/sergeyklay/gleez-mango
+```
+
+or in Gleez git dir
+
+```bash
+$ git submodule update --init --recursive
+```
+
+__Direct zipball download__
+
+https://github.com/sergeyklay/gleez-mango/archive/master.zip
+
 
 ## Features
 
