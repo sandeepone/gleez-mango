@@ -10,287 +10,283 @@
  *
  * @package    Mango\Controller\Admin
  * @author     Gleez Team
- * @version    0.2.1
+ * @version    0.2.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 
 class Controller_Admin_Log extends Controller_Admin {
 
-	/**
-	 * Current logs collection
-	 * @var \Mango_Collection
-	 */
-	private $collection;
+    /**
+     * Current logs collection
+     * @var Mango_Collection
+     */
+    private $collection;
 
-	/**
-	 * Collection name
-	 * @var string
-	 */
-	private $collection_name;
+    /**
+     * Collection name
+     * @var string
+     */
+    private $collection_name;
 
-	/**
-	 * The before() method is called before controller action
-	 *
-	 * @uses  ACL::required
-	 * @uses  Config::get
-	 * @uses  Mango::instance
-	 * @uses  Mango::__get
-	 */
-	public function before()
-	{
-		ACL::required('view logs');
+    /**
+     * Default collection name for logging
+     * @type string
+     */
+    const DEFAULT_COLLECTION_NAME = 'logs';
 
-		$this->collection_name = Config::get('mango-reader.collections.logs', 'logs');
-		$this->collection = Mango::instance()->{$this->collection_name};
+    /**
+     * The before() method is called before controller action
+     *
+     * @uses  ACL::required
+     * @uses  Config::get
+     * @uses  Mango::instance
+     * @uses  Mango::__get
+     */
+    public function before()
+    {
+        ACL::required('view logs');
 
-		parent::before();
-	}
+        $this->collection_name = Config::get('mango-reader.collections.logs', static::DEFAULT_COLLECTION_NAME);
+        $this->collection = Mango::instance()->{$this->collection_name};
 
-	/**
-	 * The after() method is called after controller action
-	 *
-	 * @uses  Route::get
-	 * @uses  Route::uri
-	 */
-	public function after()
-	{
-		$exists = Mango::instance()->exists($this->collection_name);
+        parent::before();
+    }
 
-		// Tabs
-		$this->_tabs =  array(
-			array('link' => Route::get('admin/log')->uri(array('action' =>'list')), 'text' => __('List')),
-			$exists ? array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics')) : NULL
-		);
+    /**
+     * The after() method is called after controller action
+     *
+     * @uses  Route::get
+     * @uses  Route::uri
+     */
+    public function after()
+    {
+        $exists = Mango::instance()->exists($this->collection_name);
 
-		parent::after();
-	}
+        // Tabs
+        $this->_tabs = array(
+            array('link' => Route::get('admin/log')->uri(array('action' =>'list')), 'text' => __('List')),
+        );
 
-	/**
-	 * Show Log statistics
-	 *
-	 * @uses  Mango_Collection::getStats
-	 */
-	public function action_stat()
-	{
-		$this->title = __('System Log Statistics');
+        if (Mango::instance()->exists($this->collection_name)) {
+            $this->_tabs[] = array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics'));
+        }
 
-		$view = View::factory('admin/log/stat')
-			->set('stats', $this->collection->getStats());
+        parent::after();
+    }
 
-		$this->response->body($view);
-	}
+    /**
+     * Show Log statistics
+     *
+     * @uses  Mango_Collection::getStats
+     */
+    public function action_stat()
+    {
+        $this->title = __('System Log Statistics');
 
-	/**
-	 * Shows list of events
-	 *
-	 * @uses  Config::get
-	 * @uses  Route::get
-	 * @uses  Mango::instance
-	 * @uses  Mango_Collection::count
-	 * @uses  Mango_Collection::reset
-	 * @uses  Mango_Collection::skip
-	 * @uses  Mango_Collection::sortDesc
-	 * @uses  Mango_Collection::limit
-	 * @uses  Mango_Collection::as_array
-	 */
-	public function action_list()
-	{
-		$this->title = __('System Log');
+        $view = View::factory('admin/log/stat')
+            ->set('stats', $this->collection->getStats());
 
-		$view = View::factory('admin/log/list')
-			->set('clear_url',    Route::get('admin/log')->uri(array('action' =>'clear')))
-			->bind('pagination',  $pagination)
-			->bind('logs',        $logs);
+        $this->response->body($view);
+    }
 
-		$pagination = Pagination::factory(
-			array(
-				'current_page'   => array('source'=>'cms', 'key'=>'page'),
-				'total_items'    => $this->collection->count(),
-				'items_per_page' => Config::get('mango-reader.items_per_page', 30),
-				'uri'            => Route::get('admin/log')->uri(),
-			)
-		);
+    /**
+     * Shows list of events
+     *
+     * @uses  Config::get
+     * @uses  Route::get
+     * @uses  Mango::instance
+     * @uses  Mango_Collection::count
+     * @uses  Mango_Collection::reset
+     * @uses  Mango_Collection::skip
+     * @uses  Mango_Collection::sortDesc
+     * @uses  Mango_Collection::limit
+     * @uses  Mango_Collection::as_array
+     */
+    public function action_list()
+    {
+        $this->title = __('System Log');
 
-		$logs = $this->collection
-			->reset()
-			->sortDesc('time')
-			->skip($pagination->offset)
-			->limit($pagination->items_per_page)
-			->toArray();
+        $view = View::factory('admin/log/list')
+            ->set('clear_url',    Route::get('admin/log')->uri(array('action' =>'clear')))
+            ->bind('pagination',  $pagination)
+            ->bind('logs',        $logs);
 
-		$this->response->body($view);
-	}
+        $pagination = Pagination::factory(
+            array(
+                'current_page'   => array('source'=>'cms', 'key'=>'page'),
+                'total_items'    => $this->collection->count(),
+                'items_per_page' => Config::get('mango-reader.items_per_page', 30),
+                'uri'            => Route::get('admin/log')->uri(),
+            )
+        );
 
-	/**
-	 * View a particular event
-	 *
-	 * @uses  Mango_Collection::findOne
-	 * @uses  Message::alert
-	 * @uses  Log::add
-	 * @uses  Route::get
-	 * @uses  Route::uri
-	 * @uses  Request::redirect
-	 */
-	public function action_view()
-	{
-		$this->title  = __('View Log');
-		$id = $this->request->param('id', 0);
+        $logs = $this->collection
+            ->reset()
+            ->sortDesc('time')
+            ->skip($pagination->offset)
+            ->limit($pagination->items_per_page)
+            ->toArray();
 
-		$log = $this->collection->findOne(array('_id' => new MongoId($id)));
+        $this->response->body($view);
+    }
 
-		if(is_null($log))
-		{
-			Log::warning('An attempt to get the log event id: `:id`, which is not found!',
-				array(':id' => $id)
-			);
-			Message::alert(__('Message #%id not found!', array('%id' => $id)));
+    /**
+     * View a particular event
+     *
+     * @uses  Mango_Collection::findOne
+     * @uses  Message::alert
+     * @uses  Log::add
+     * @uses  Route::get
+     * @uses  Route::uri
+     * @uses  Request::redirect
+     */
+    public function action_view()
+    {
+        $this->title  = __('View Log');
+        $id = $this->request->param('id', 0);
 
-			// Redirect to listing
-			$this->request->redirect(Route::get('admin/log')->uri(), 404);
-		}
+        $log = $this->collection->findOne(array('_id' => new MongoId($id)));
 
-		$view = View::factory('admin/log/view')
-			->set('log',        $log);
+        if(is_null($log)) {
+            Log::warning('An attempt to get the log event id: `:id`, which is not found!',
+                array(':id' => $id)
+            );
+            Message::alert(__('Message #%id not found!', array('%id' => $id)));
 
-		$this->response->body($view);
-	}
+            // Redirect to listing
+            $this->request->redirect(Route::get('admin/log')->uri(), 404);
+        }
 
-	/**
-	 * Delete the message from log
-	 *
-	 * @uses  ACL::required
-	 * @uses  Mango_Collection::findOne
-	 * @uses  Mango_Collection::safeRemove
-	 * @uses  Message::success
-	 * @uses  Message::alert
-	 * @uses  Message::error
-	 * @uses  Log::add
-	 * @uses  Request::redirect
-	 * @uses  Route::get
-	 * @uses  Route::uri
-	 * @uses  Route::url
-	 * @uses  Template::valid_post
-	 */
-	public function action_delete()
-	{
-		// Required privilege
-		ACL::required('delete logs');
+        $view = View::factory('admin/log/view')
+            ->set('log', $log);
 
-		$id  = $this->request->param('id', 0);
-		$log = $this->collection->findOne(array('_id' => new MongoId($id)));
+        $this->response->body($view);
+    }
 
-		if (is_null($log))
-		{
-			Log::warning('An attempt to delete the log event id: `:id`, which is not found!',
-				array(':id' => $id)
-			);
-			Message::alert(__('Message #%id not found!', array(':id' => $id)));
+    /**
+     * Delete the message from log
+     *
+     * @uses  ACL::required
+     * @uses  Mango_Collection::findOne
+     * @uses  Mango_Collection::safeRemove
+     * @uses  Message::success
+     * @uses  Message::alert
+     * @uses  Message::error
+     * @uses  Log::add
+     * @uses  Request::redirect
+     * @uses  Route::get
+     * @uses  Route::uri
+     * @uses  Route::url
+     * @uses  Template::valid_post
+     */
+    public function action_delete()
+    {
+        // Required privilege
+        ACL::required('delete logs');
 
-			// Redirect to listing
-			$this->request->redirect(Route::get('admin/log')->uri(), 404);
-		}
+        $id  = $this->request->param('id', 0);
+        $log = $this->collection->findOne(array('_id' => new MongoId($id)));
 
-		$this->title = __('Delete :id', array(':id' => $id));
-		$view = View::factory('form/confirm')
-			->set('action', Route::url('admin/log', array('action' => 'delete', 'id' => $id)))
-			->set('title', __('Log #:id', array(':id' => $id)));
+        if (is_null($log)) {
+            Log::warning('An attempt to delete the log event id: `:id`, which is not found!',
+                array(':id' => $id)
+            );
+            Message::alert(__('Message #%id not found!', array(':id' => $id)));
 
-		// If deletion is not desired, redirect to list
-		if (isset($_POST['no']) AND $this->valid_post())
-		{
-			// Redirect to listing
-			$this->request->redirect(Route::get('admin/log')->uri(), 200);
-		}
+            // Redirect to listing
+            $this->request->redirect(Route::get('admin/log')->uri(), 404);
+        }
 
-		// If deletion is confirmed
-		if (isset($_POST['yes']) AND $this->valid_post())
-		{
-			try
-			{
-				$this->collection->safeRemove(
-					array('_id'     => new MongoId($id)), // Event ID
-					array('justOne' => TRUE)              // Remove at most one record
-				);
+        $this->title = __('Delete :id', array(':id' => $id));
+        $view = View::factory('form/confirm')
+            ->set('action', Route::url('admin/log', array('action' => 'delete', 'id' => $id)))
+            ->set('title', __('Log #:id', array(':id' => $id)));
 
-				Log::info('System log successfully cleared.');
-				Message::set(Message::SUCCESS,__('Entry from the system log has been removed'));
+        // If deletion is not desired, redirect to list
+        if (isset($_POST['no']) AND $this->valid_post()) {
+            // Redirect to listing
+            $this->request->redirect(Route::get('admin/log')->uri(), 200);
+        }
 
-				// Redirect to listing
-				$this->request->redirect(Route::get('admin/log')->uri(), 200);
-			}
-			catch (MongoException $e)
-			{
-				Message::error(__('An error occurred when deleting the message: %msg',
-					array(':msg' => $e->getMessage())
-				));
+        // If deletion is confirmed
+        if (isset($_POST['yes']) AND $this->valid_post()) {
+            try {
+                $this->collection->safeRemove(
+                    array('_id'     => new MongoId($id)), // Event ID
+                    array('justOne' => TRUE)              // Remove at most one record
+                );
 
-				// Redirect to listing
-				$this->request->redirect(Route::get('admin/log')->uri(), 500);
-			}
-		}
+                Log::info('System log successfully cleared.');
+                Message::success(__('Entry from the system log has been removed'));
 
-		$this->response->body($view);
-	}
+                // Redirect to listing
+                $this->request->redirect(Route::get('admin/log')->uri(), 200);
+            } catch (MongoException $e) {
+                Message::error(__('An error occurred when deleting the message: %msg',
+                    array(':msg' => $e->getMessage())
+                ));
 
-	/**
-	 * Drop collection
-	 *
-	 * @uses  ACL::required
-	 * @uses  Route::url
-	 * @uses  Route::get
-	 * @uses  Route::uri
-	 * @uses  Template::valid_post
-	 * @uses  Request::redirect
-	 * @uses  Message::success
-	 * @uses  Message::error
-	 * @uses  Mango_Collection::safeDrop
-	 */
-	public function action_clear()
-	{
-		// Required privilege
-		ACL::required('delete logs');
+                // Redirect to listing
+                $this->request->redirect(Route::get('admin/log')->uri(), 500);
+            }
+        }
 
-		$this->title = __('Drop system log');
+        $this->response->body($view);
+    }
 
-		$view = View::factory('form/confirm')
-			->set('action', Route::url('admin/log', array('action' => 'clear')))
-			->set('title', __('All logs'));
+    /**
+     * Drop collection
+     *
+     * @uses  ACL::required
+     * @uses  Route::url
+     * @uses  Route::get
+     * @uses  Route::uri
+     * @uses  Template::valid_post
+     * @uses  Request::redirect
+     * @uses  Message::success
+     * @uses  Message::error
+     * @uses  Mango_Collection::safeDrop
+     */
+    public function action_clear()
+    {
+        // Required privilege
+        ACL::required('delete logs');
 
-		// If deletion is not desired, redirect to list
-		if (isset($_POST['no']) AND $this->valid_post())
-		{
-			$this->request->redirect(Route::get('admin/log')->uri(), 200);
-		}
+        $this->title = __('Drop system log');
 
-		// If deletion is confirmed
-		if (isset($_POST['yes']) AND $this->valid_post())
-		{
-			try
-			{
-				$response = $this->collection->safeRemove();
+        $view = View::factory('form/confirm')
+            ->set('action', Route::url('admin/log', array('action' => 'clear')))
+            ->set('title', __('All logs'));
 
-				Log::info('System log successfully cleared.');
-				Message::success(__('System log successfully cleared. Database message: %msg',
-					array('%msg' => $response['msg'])
-				));
+        // If deletion is not desired, redirect to list
+        if (isset($_POST['no']) AND $this->valid_post()) {
+            $this->request->redirect(Route::get('admin/log')->uri(), 200);
+        }
 
-				// Redirect to listing
-				$this->request->redirect(Route::get('admin/log')->uri(), 200);
-			}
-			catch (MongoException $e)
-			{
-				Log::error('An error occurred when dropping the system log: :msg',
-					array(':msg' => $e->getMessage())
-				);
-				Message::error(__('An error occurred when dropping the system log: %msg',
-					array('%msg' => $e->getMessage())
-				));
+        // If deletion is confirmed
+        if (isset($_POST['yes']) AND $this->valid_post()) {
+            try {
+                $response = $this->collection->safeRemove();
 
-				// Redirect to listing
-				$this->request->redirect(Route::get('admin/log')->uri(), 500);
-			}
-		}
-		$this->response->body($view);
-	}
+                Log::info('System log successfully cleared.');
+                Message::success(__('System log successfully cleared.'));
+
+                // Redirect to listing
+                $this->request->redirect(Route::get('admin/log')->uri(), 200);
+            } catch (MongoException $e) {
+                Log::error('An error occurred when dropping the system log: :msg',
+                    array(':msg' => $e->getMessage())
+                );
+                Message::error(__('An error occurred when dropping the system log: %msg',
+                    array('%msg' => $e->getMessage())
+                ));
+
+                // Redirect to listing
+                $this->request->redirect(Route::get('admin/log')->uri(), 500);
+            }
+        }
+
+        $this->response->body($view);
+    }
 }
