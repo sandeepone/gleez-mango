@@ -1,9 +1,11 @@
 <?php
 
 return array(
-	'collections' => array(
-		'logs' => 'logs'
-	),
+    // Collection name
+    'collections' => array(
+        'logs' => 'logs'
+    ),
 
-	'items_per_page' => 30,
+    // Pagination settings
+    'items_per_page' => 30,
 );
