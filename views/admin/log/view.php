@@ -46,10 +46,12 @@
             <td><?php _e('Line')?></td>
             <td><?php echo isset($log['line']) ? Text::plain($log['line']) : '&mdash;' ?></td>
         </tr>
-        <tr>
-            <td><?php _e('Class')?></td>
-            <td><?php echo Text::plain($log['class']) ?></td>
-        </tr>
+        <?php if (isset($log['class'])): ?>
+            <tr>
+                <td><?php _e('Class')?></td>
+                <td><?php echo Text::plain($log['class']) ?></td>
+            </tr>
+        <?php endif; ?>
         <tr>
             <td><?php _e('Function')?></td>
             <td><?php echo Text::plain($log['function']) ?></td>
