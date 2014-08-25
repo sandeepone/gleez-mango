@@ -13,6 +13,11 @@
     </thead>
     <tbody>
         <tr>
+            <td><var>version</var></td>
+            <td><?php echo $mongoVersion ?></td>
+            <td><?php _e('MongoDB version') ?></td>
+        </tr>
+        <tr>
             <td><var>ns</var></td>
             <td><?php echo $stats['ns']; ?></td>
             <td><?php _e('The namespace of the current collection, which follows the format [database].[collection]'); ?></td>

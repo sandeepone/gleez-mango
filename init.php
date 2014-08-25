@@ -2,7 +2,7 @@
 /**
  * Setting the Routes
  *
- * @package    Gleez\Mango\Routing
+ * @package    MangoReader\Routing
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License

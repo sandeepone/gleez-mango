@@ -1,25 +1,32 @@
 <?php
 /**
+ * Gleez CMS (http://gleezcms.org)
+ *
+ * @link      https://github.com/sergeyklay/gleez-mango Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+
+use Gleez\Mango\Client;
+
+/**
  * Admin Controller Class for control logging
  *
- * ### System Requirements
+ * System Requirements
  *
- * - Gleez CMS 0.10.4 or higher
+ * - Gleez CMS 1.1.5 or higher
  * - MondoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
- * @package    Mango\Controller\Admin
+ * @package    MangoReader\Controller\Admin
  * @author     Gleez Team
- * @version    0.2.2
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @version    1.0.0
  */
-
 class Controller_Admin_Log extends Controller_Admin {
 
     /**
      * Current logs collection
-     * @var Mango_Collection
+     * @var \Gleez\Mango\Collection
      */
     private $collection;
 
@@ -40,15 +47,15 @@ class Controller_Admin_Log extends Controller_Admin {
      *
      * @uses  ACL::required
      * @uses  Config::get
-     * @uses  Mango::instance
-     * @uses  Mango::__get
+     * @uses  \Gleez\Mango\Client::instance
+     * @uses  \Gleez\Mango\Client::__get
      */
     public function before()
     {
         ACL::required('view logs');
 
         $this->collection_name = Config::get('mango-reader.collections.logs', static::DEFAULT_COLLECTION_NAME);
-        $this->collection = Mango::instance()->{$this->collection_name};
+        $this->collection = Client::instance()->{$this->collection_name};
 
         parent::before();
     }
@@ -61,14 +68,12 @@ class Controller_Admin_Log extends Controller_Admin {
      */
     public function after()
     {
-        $exists = Mango::instance()->exists($this->collection_name);
-
         // Tabs
         $this->_tabs = array(
             array('link' => Route::get('admin/log')->uri(array('action' =>'list')), 'text' => __('List')),
         );
 
-        if (Mango::instance()->exists($this->collection_name)) {
+        if (Client::instance()->isCollectionExists($this->collection_name)) {
             $this->_tabs[] = array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics'));
         }
 
@@ -78,14 +83,15 @@ class Controller_Admin_Log extends Controller_Admin {
     /**
      * Show Log statistics
      *
-     * @uses  Mango_Collection::getStats
+     * @uses  \Gleez\Mango\Collection::getStats
      */
     public function action_stat()
     {
         $this->title = __('System Log Statistics');
 
         $view = View::factory('admin/log/stat')
-            ->set('stats', $this->collection->getStats());
+            ->set('stats', $this->collection->getStats())
+            ->set('mongoVersion', Client::instance()->getMongoVersion());
 
         $this->response->body($view);
     }
@@ -95,13 +101,13 @@ class Controller_Admin_Log extends Controller_Admin {
      *
      * @uses  Config::get
      * @uses  Route::get
-     * @uses  Mango::instance
-     * @uses  Mango_Collection::count
-     * @uses  Mango_Collection::reset
-     * @uses  Mango_Collection::skip
-     * @uses  Mango_Collection::sortDesc
-     * @uses  Mango_Collection::limit
-     * @uses  Mango_Collection::as_array
+     * @uses  \Gleez\Mango\Client::instance
+     * @uses  \Gleez\Mango\Collection::count
+     * @uses  \Gleez\Mango\Collection::reset
+     * @uses  \Gleez\Mango\Collection::skip
+     * @uses  \Gleez\Mango\Collection::sortDesc
+     * @uses  \Gleez\Mango\Collection::limit
+     * @uses  \Gleez\Mango\Collection::toArray
      */
     public function action_list()
     {
@@ -134,7 +140,7 @@ class Controller_Admin_Log extends Controller_Admin {
     /**
      * View a particular event
      *
-     * @uses  Mango_Collection::findOne
+     * @uses  \Gleez\Mango\Collection::findOne
      * @uses  Message::alert
      * @uses  Log::add
      * @uses  Route::get
@@ -168,8 +174,8 @@ class Controller_Admin_Log extends Controller_Admin {
      * Delete the message from log
      *
      * @uses  ACL::required
-     * @uses  Mango_Collection::findOne
-     * @uses  Mango_Collection::safeRemove
+     * @uses  \Gleez\Mango\Collection::findOne
+     * @uses  \Gleez\Mango\Collection::safeRemove
      * @uses  Message::success
      * @uses  Message::alert
      * @uses  Message::error
@@ -246,7 +252,7 @@ class Controller_Admin_Log extends Controller_Admin {
      * @uses  Request::redirect
      * @uses  Message::success
      * @uses  Message::error
-     * @uses  Mango_Collection::safeDrop
+     * @uses  \Gleez\Mango\Collection::safeDrop
      */
     public function action_clear()
     {
