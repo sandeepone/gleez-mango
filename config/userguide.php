@@ -17,7 +17,7 @@ return array(
             'description' => 'Read all System Logs with using MongoDB DBMS.',
 
             // Copyright message, shown in the footer for this module
-            'copyright' => '&copy; 2011-2013 Gleez Technologies',
+            'copyright' => '&copy; 2011-'.date('Y').' Gleez Technologies',
         )
     )
 );

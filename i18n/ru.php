@@ -3,7 +3,7 @@
  * Localized strings into Russian
  *
  * @package   Gleez\Mango\I18n
- * @author    Sergey Yakovlev <sadhooklay@gmail.com>
+ * @author    Serghei Iakovlev <sadhooklay@gmail.com>
  * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
@@ -46,6 +46,7 @@ return array(
     // M
     'Message' => 'Сообщение',
     'Message #%id not found!' => 'Сообщение #%id не найдено!',
+    'MongoDB version' => 'Версия MongoDB',
     // N
     // O
     // P
