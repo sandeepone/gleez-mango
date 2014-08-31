@@ -11,7 +11,7 @@
 /** Routing setup */
 if (!Route::cache()) {
     Route::set('admin/log', 'admin/logs(/<action>(/<id>))(/p<page>)', array(
-        'id'          => '([A-Za-z0-9]+)',
+        'id'          => '([A-Fa-f0-9]+)',
         'page'        => '\d+',
         'action'      => 'stat|list|view|delete|clear',
     ))
