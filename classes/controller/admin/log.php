@@ -8,22 +8,18 @@
  */
 
 use Gleez\Mango\Client;
+use Gleez\Mango\Document;
+use Gleez\Mango\Exception;
 
 /**
  * Admin Controller Class for control logging
  *
- * System Requirements
- *
- * - Gleez CMS 1.1.5 or higher
- * - MondoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4.0 or higher
- *
- * @package    MangoReader\Controller\Admin
- * @author     Gleez Team
- * @version    1.0.0
+ * @package MangoReader\Controller\Admin
+ * @author  Gleez Team
+ * @version 1.0.0
  */
-class Controller_Admin_Log extends Controller_Admin {
-
+class Controller_Admin_Log extends Controller_Admin
+{
     /**
      * Current logs collection
      * @var \Gleez\Mango\Collection
@@ -34,7 +30,7 @@ class Controller_Admin_Log extends Controller_Admin {
      * Collection name
      * @var string
      */
-    private $collection_name;
+    private $collectionName;
 
     /**
      * Default collection name for logging
@@ -54,8 +50,8 @@ class Controller_Admin_Log extends Controller_Admin {
     {
         ACL::required('view logs');
 
-        $this->collection_name = Config::get('mango-reader.collections.logs', static::DEFAULT_COLLECTION_NAME);
-        $this->collection = Client::instance()->{$this->collection_name};
+        $this->collectionName = Config::get('mango-reader.collections.logs', static::DEFAULT_COLLECTION_NAME);
+        $this->collection = Client::instance()->{$this->collectionName};
 
         parent::before();
     }
@@ -73,7 +69,7 @@ class Controller_Admin_Log extends Controller_Admin {
             array('link' => Route::get('admin/log')->uri(array('action' =>'list')), 'text' => __('List')),
         );
 
-        if (Client::instance()->isCollectionExists($this->collection_name)) {
+        if (Client::instance()->isCollectionExists($this->collectionName)) {
             $this->_tabs[] = array('link' => Route::get('admin/log')->uri(array('action' =>'stat')), 'text' => __('Statistics'));
         }
 
@@ -91,23 +87,13 @@ class Controller_Admin_Log extends Controller_Admin {
 
         $view = View::factory('admin/log/stat')
             ->set('stats', $this->collection->getStats())
-            ->set('mongoVersion', Client::instance()->getMongoVersion());
+            ->set('mongoVersion', $this->collection->getClientInstance()->getMongoVersion());
 
         $this->response->body($view);
     }
 
     /**
-     * Shows list of events
-     *
-     * @uses  Config::get
-     * @uses  Route::get
-     * @uses  \Gleez\Mango\Client::instance
-     * @uses  \Gleez\Mango\Collection::count
-     * @uses  \Gleez\Mango\Collection::reset
-     * @uses  \Gleez\Mango\Collection::skip
-     * @uses  \Gleez\Mango\Collection::sortDesc
-     * @uses  \Gleez\Mango\Collection::limit
-     * @uses  \Gleez\Mango\Collection::toArray
+     * Shows list of log entries
      */
     public function action_list()
     {
@@ -131,78 +117,51 @@ class Controller_Admin_Log extends Controller_Admin {
             ->reset()
             ->sortDesc('time')
             ->skip($pagination->offset)
-            ->limit($pagination->items_per_page)
-            ->toArray();
+            ->limit($pagination->items_per_page);
 
         $this->response->body($view);
     }
 
     /**
-     * View a particular event
-     *
-     * @uses  \Gleez\Mango\Collection::findOne
-     * @uses  Message::alert
-     * @uses  Log::add
-     * @uses  Route::get
-     * @uses  Route::uri
-     * @uses  Request::redirect
+     * View a particular log entry
      */
     public function action_view()
     {
         $this->title  = __('View Log');
-        $id = $this->request->param('id', 0);
+        $id = $this->request->param('id');
+        $model = Document::factory('Log', $id);
 
-        $log = $this->collection->findOne(array('_id' => new MongoId($id)));
-
-        if(is_null($log)) {
-            Log::warning('An attempt to get the log event id: `:id`, which is not found!',
-                array(':id' => $id)
-            );
-            Message::alert(__('Message #%id not found!', array('%id' => $id)));
+        if (!$model->isLoaded()) {
+            Log::warning('An attempt to get the log entry id: [:id], which is not found!', array(':id' => $id));
+            Message::error(__('Log entry #:id not found!', array(':id' => $id)));
 
             // Redirect to listing
             $this->request->redirect(Route::get('admin/log')->uri(), 404);
         }
 
-        $view = View::factory('admin/log/view')
-            ->set('log', $log);
-
-        $this->response->body($view);
+        $this->response->body(View::factory('admin/log/view', array('model' => $model)));
     }
 
     /**
      * Delete the message from log
      *
-     * @uses  ACL::required
-     * @uses  \Gleez\Mango\Collection::findOne
-     * @uses  \Gleez\Mango\Collection::safeRemove
-     * @uses  Message::success
-     * @uses  Message::alert
-     * @uses  Message::error
-     * @uses  Log::add
-     * @uses  Request::redirect
-     * @uses  Route::get
-     * @uses  Route::uri
-     * @uses  Route::url
-     * @uses  Template::valid_post
+     * @throws \Gleez\Mango\Exception
      */
     public function action_delete()
     {
         // Required privilege
         ACL::required('delete logs');
 
-        $id  = $this->request->param('id', 0);
-        $log = $this->collection->findOne(array('_id' => new MongoId($id)));
+	    $id = $this->request->param('id');
+	    $model = Document::factory('Log', $id);
 
-        if (is_null($log)) {
-            Log::warning('An attempt to delete the log event id: `:id`, which is not found!',
-                array(':id' => $id)
-            );
-            Message::alert(__('Message #%id not found!', array(':id' => $id)));
+	    if (!$model->isLoaded()) {
+		    Log::warning('An attempt to get the log entry id: [:id], which is not found!', array(':id' => $id));
+		    Message::error(__('Log entry #:id not found!', array(':id' => $id)));
 
-            // Redirect to listing
-            $this->request->redirect(Route::get('admin/log')->uri(), 404);
-        }
+		    // Redirect to listing
+		    $this->request->redirect(Route::get('admin/log')->uri(), 404);
+	    }
 
         $this->title = __('Delete :id', array(':id' => $id));
         $view = View::factory('form/confirm')
@@ -218,23 +177,18 @@ class Controller_Admin_Log extends Controller_Admin {
         // If deletion is confirmed
         if (isset($_POST['yes']) AND $this->valid_post()) {
             try {
-                $this->collection->safeRemove(
-                    array('_id'     => new MongoId($id)), // Event ID
-                    array('justOne' => TRUE)              // Remove at most one record
-                );
+	            $model->delete();
 
-                Log::info('System log successfully cleared.');
-                Message::success(__('Entry from the system log has been removed'));
+                Log::info('Log entry #:id successfully deleted.', array(':id' => $id));
+                Message::success(__('Log entry #:id successfully deleted.'));
 
                 // Redirect to listing
                 $this->request->redirect(Route::get('admin/log')->uri(), 200);
-            } catch (MongoException $e) {
-                Message::error(__('An error occurred when deleting the message: %msg',
-                    array(':msg' => $e->getMessage())
-                ));
+            } catch (Exception $e) {
+                Message::error(__('An error occurred when deleting the log entry: %msg',array('%msg' => $e->getMessage())));
 
                 // Redirect to listing
-                $this->request->redirect(Route::get('admin/log')->uri(), 500);
+                $this->request->redirect(Route::get('admin/log')->uri(), $e->getCode());
             }
         }
 
@@ -242,24 +196,16 @@ class Controller_Admin_Log extends Controller_Admin {
     }
 
     /**
-     * Drop collection
+     * Clean up system log
      *
-     * @uses  ACL::required
-     * @uses  Route::url
-     * @uses  Route::get
-     * @uses  Route::uri
-     * @uses  Template::valid_post
-     * @uses  Request::redirect
-     * @uses  Message::success
-     * @uses  Message::error
-     * @uses  \Gleez\Mango\Collection::safeDrop
+     * @throws \Gleez\Mango\Exception
      */
     public function action_clear()
     {
         // Required privilege
         ACL::required('delete logs');
 
-        $this->title = __('Drop system log');
+        $this->title = __('Clean up system log');
 
         $view = View::factory('form/confirm')
             ->set('action', Route::url('admin/log', array('action' => 'clear')))
@@ -273,23 +219,19 @@ class Controller_Admin_Log extends Controller_Admin {
         // If deletion is confirmed
         if (isset($_POST['yes']) AND $this->valid_post()) {
             try {
-                $response = $this->collection->safeRemove();
+                $this->collection->safeRemove();
 
-                Log::info('System log successfully cleared.');
-                Message::success(__('System log successfully cleared.'));
+                Log::info('System log has successfully cleaned up.');
+                Message::success(__('System log has successfully cleaned up.'));
 
                 // Redirect to listing
                 $this->request->redirect(Route::get('admin/log')->uri(), 200);
-            } catch (MongoException $e) {
-                Log::error('An error occurred when dropping the system log: :msg',
-                    array(':msg' => $e->getMessage())
-                );
-                Message::error(__('An error occurred when dropping the system log: %msg',
-                    array('%msg' => $e->getMessage())
-                ));
+            } catch (Exception $e) {
+                Log::error('An error occurred when cleaning the system log: :msg', array(':msg' => $e->getMessage()));
+                Message::error(__('An error occurred when cleaning the system log: %msg', array('%msg' => $e->getMessage())));
 
                 // Redirect to listing
-                $this->request->redirect(Route::get('admin/log')->uri(), 500);
+                $this->request->redirect(Route::get('admin/log')->uri(), $e->getCode());
             }
         }
 

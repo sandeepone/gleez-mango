@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var string $mongoVersion
+ * @var array $stats
+ */
+?>
 <div class="help">
     <?php _e('For DB admins only. This shows variety of storage statistics for a given collection.'); ?>
 </div>
@@ -13,9 +19,14 @@
     </thead>
     <tbody>
         <tr>
-            <td><var>version</var></td>
-            <td><?php echo $mongoVersion ?></td>
-            <td><?php _e('MongoDB version') ?></td>
+            <td><var>driver</var></td>
+            <td><?php echo \MongoClient::VERSION ?></td>
+            <td><?php _e('Driver version') ?></td>
+        </tr>
+        <tr>
+	        <td><var>version</var></td>
+	        <td><?php echo $mongoVersion ?></td>
+	        <td><?php _e('MongoDB version') ?></td>
         </tr>
         <tr>
             <td><var>ns</var></td>

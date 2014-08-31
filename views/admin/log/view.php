@@ -1,72 +1,71 @@
+<?php
+/**
+ * @var Model_Log $model
+ */
+?>
+
 <div class="help">
     <?php _e('Here shows the complete information about current entry from the System log.'); ?>
 </div>
 
-<?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' =>'delete', 'id' => $log['_id'])), '<i class="fa fa-trash-o"></i> '.__('Delete'), array('class' => 'btn btn-danger pull-right', 'title' => __('Delete this entry from log'))) ?>
+<?php echo HTML::anchor(Route::get('admin/log')->uri(array('action' =>'delete', 'id' => $model->id)), '<i class="fa fa-trash-o"></i> '.__('Delete'), array('class' => 'btn btn-danger pull-right', 'title' => __('Delete this entry from log'))) ?>
 <div class="clearfix"></div><br>
 
-<table id="log-admin-view" class="table table-striped table-bordered table-highlight">
-    <colgroup><col class="oce-first"></colgroup>
+<table id="log-admin-view" class="table table-bordered">
     <thead>
-    <tr>
-        <th><?php _e('Field')?></th>
-        <th><?php _e('Value')?></th>
-    </tr>
+	    <tr>
+	        <th><?php _e('Field')?></th>
+	        <th><?php _e('Value')?></th>
+	    </tr>
     </thead>
     <tbody>
         <tr>
-            <td><?php _e('ID'); ?></td>
-            <td><?php echo $log['_id']; ?></td>
+            <th><?php _e('ID'); ?></th>
+            <td><?php echo $model->id; ?></td>
         </tr>
         <tr>
-            <td><?php _e('Type')?></td>
+            <th><?php _e('Type')?></th>
+            <td><?php echo HTML::label($model->level, $model->level); ?></td>
+        </tr>
+        <tr>
+            <th><?php _e('Date')?></th>
             <td>
-                <?php echo HTML::label($log['level'], $log['level']); ?>
+                <?php echo Date::formatted_time($model->id->getTimestamp(), Config::get('site.date_time_format', 'l, F j, Y - H:i'), Config::get('site.timezone', 'UTC')); ?>
             </td>
         </tr>
         <tr>
-            <td><?php _e('Date')?></td>
-            <td>
-                <?php echo Date::formatted_time($log['_id']->getTimestamp(), Config::get('site.date_time_format', 'l, F j, Y - H:i'), Config::get('site.timezone', 'UTC')); ?>
-            </td>
+            <th><?php _e('Host')?></th>
+            <td><?php echo $model->hostname; ?></td>
         </tr>
         <tr>
-            <td><?php _e('Host')?></td>
-            <td><?php echo $log['hostname']; ?></td>
+            <th><?php _e('User Agent')?></th>
+            <td><?php echo $model->user_agent ?></td>
         </tr>
         <tr>
-            <td><?php _e('User Agent')?></td>
-            <td><?php echo isset($log['user_agent']) ? $log['user_agent'] : '&mdash;' ?></td>
+            <th><?php _e('File')?></th>
+            <td><code><?php echo $model->file ?></code></td>
         </tr>
         <tr>
-            <td><?php _e('File')?></td>
-            <td><?php echo isset($log['file']) ? Text::plain($log['file']) : '&mdash;' ?></td>
+            <th><?php _e('Line')?></th>
+            <td><?php echo $model->line ?></td>
+        </tr>
+            <th><?php _e('Class')?></th>
+            <td><?php echo $model->class ?></td>
+        <tr>
+            <th><?php _e('Function')?></th>
+            <td><?php echo $model->function ?></td>
         </tr>
         <tr>
-            <td><?php _e('Line')?></td>
-            <td><?php echo isset($log['line']) ? Text::plain($log['line']) : '&mdash;' ?></td>
-        </tr>
-        <?php if (isset($log['class'])): ?>
-            <tr>
-                <td><?php _e('Class')?></td>
-                <td><?php echo Text::plain($log['class']) ?></td>
-            </tr>
-        <?php endif; ?>
-        <tr>
-            <td><?php _e('Function')?></td>
-            <td><?php echo Text::plain($log['function']) ?></td>
+            <th><?php _e('URL')?></th>
+            <td><?php echo HTML::anchor($model->url, URL::site($model->url, true)) ?></td>
         </tr>
         <tr>
-            <td><?php _e('URL')?></td>
-            <td><?php echo Text::plain($log['url']) ?></td>
+            <th><?php _e('Referer')?></th>
+            <td><?php echo HTML::anchor($model->referer, URL::site($model->referer, true)) ?></td>
         </tr>
         <tr>
-            <td><?php _e('Refer')?></td>
-            <td><?php echo isset($log['refer']) ? Text::plain($log['refer']) : '&mdash;' ?></td>
-        </tr>
-        <tr>
-            <td><?php _e('Message')?></td>
-            <td><?php echo Text::plain($log['body']) ?></td>
+            <th><?php _e('Message')?></th>
+            <td><pre><?php echo $model->body ?></pre></td>
         </tr>
     </tbody>
 </table>
